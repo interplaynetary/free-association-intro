@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Association - Scientific Capacity-Allocation</title>
+    <meta name="description"
+        content="The Free Association Coalition: Transforming the state through voluntary contribution and proportional distribution of capacity.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<style>
+    .math-block {
+        font-family: 'Times New Roman', serif;
+        font-size: 1.1rem;
+        background: rgba(255, 255, 255, 0.4);
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        text-align: center;
+        color: var(--text-dark);
+        border: 1px solid rgba(136, 178, 112, 0.2);
+        overflow-x: auto;
+        max-width: 100%;
+    }
+
+    :root {
+        /* Monetarycommons-inspired color palette */
+        --bg-cream: #f4eed8;
+        --bg-green: #88b270;
+        --accent-coral: #d97757;
+        --text-dark: #263308;
+        --text-body: #3a4a1a;
+
+        /* Typography */
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --font-serif: 'Lora', 'EB Garamond', Georgia, serif;
+        --font-display: 'Space Grotesk', sans-serif;
+
+        /* Transitions */
+        --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+    }
+
+    body {
+        font-family: var(--font-serif);
+        background: var(--bg-cream);
+        color: var(--text-body);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        position: relative;
+    }
+
+    /* Grain texture overlay */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+        opacity: 0.15;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: soft-light;
+    }
+
+    /* Atmospheric vignette */
+    body::after {
+        content: '';
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(38, 51, 8, 0.15) 100%);
+        pointer-events: none;
+        z-index: 9998;
+    }
+
+    /* Hero Section */
+    .hero {
+        min-height: 100vh;
+        background: var(--bg-green);
+        /* Changed from var(--green-hero) to var(--bg-green) for consistency */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 4rem 2rem;
+        position: relative;
+    }
+
+    .hero-content {
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .hero-logo {
+        width: 180px;
+        height: 180px;
+        object-fit: contain;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+        font-family: 'Space Grotesk', var(--font-display);
+        font-size: clamp(3rem, 7vw, 5rem);
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        text-shadow: 0 2px 4px rgba(38, 51, 8, 0.1);
+    }
+
+    .hero-subtitle {
+        font-family: var(--font-sans);
+        font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+        font-weight: 500;
+        color: #ffffff;
+        opacity: 0.95;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin: 0;
+        text-shadow: 0 1px 2px rgba(38, 51, 8, 0.1);
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+        position: absolute;
+        bottom: 3rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        color: #ffffff;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+    }
+
+    .scroll-indicator:hover {
+        opacity: 1;
+    }
+
+    .scroll-arrow {
+        width: 24px;
+        height: 24px;
+        border-right: 2px solid #ffffff;
+        border-bottom: 2px solid #ffffff;
+        transform: rotate(45deg);
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            transform: rotate(45deg) translateY(0);
+        }
+
+        40% {
+            transform: rotate(45deg) translateY(8px);
+        }
+
+        60% {
+            transform: rotate(45deg) translateY(4px);
+        }
+    }
+
+    /* Accordion Container */
+    .accordion-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: var(--bg-cream);
+    }
+
+    /* Accordion Section */
+    .accordion-section {
+        border-bottom: 1px solid rgba(38, 51, 8, 0.15);
+    }
+
+    .section-header {
+        width: 100%;
+        background: transparent;
+        border: none;
+        padding: 3rem 2rem;
+        text-align: left;
+        cursor: pointer;
+        position: relative;
+        transition: all var(--transition-fast);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .section-header:hover {
+        background: rgba(136, 178, 112, 0.08);
+    }
+
+    .section-header:focus {
+        outline: 2px solid var(--accent-coral);
+        outline-offset: -2px;
+    }
+
+    .section-title {
+        font-family: var(--font-sans);
+        font-size: clamp(1.75rem, 4vw, 3.5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-dark);
+        margin: 0;
+        padding-right: 4rem;
+        transition: color var(--transition-fast);
+    }
+
+    .section-header[aria-expanded="true"] .section-title {
+        color: var(--accent-coral);
+    }
+
+    .section-subtitle {
+        font-family: var(--font-serif);
+        font-size: clamp(1rem, 2vw, 1.125rem);
+        color: var(--text-body);
+        font-weight: 400;
+        margin: 0;
+        font-style: italic;
+    }
+
+    .expand-icon {
+        position: absolute;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 3.5rem;
+        font-weight: 300;
+        color: var(--text-dark);
+        transition: all var(--transition-medium);
+        line-height: 1;
+    }
+
+    .section-header[aria-expanded="true"] .expand-icon {
+        transform: translateY(-50%) rotate(45deg);
+        color: var(--accent-coral);
+    }
+
+    /* Section Content */
+    .section-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height var(--transition-medium);
+        background: transparent;
+    }
+
+    .section-content.expanded {
+        max-height: 5000px;
+    }
+
+    .content-inner {
+        padding: 2rem 2rem 4rem;
+        max-width: 900px;
+        margin: 0 auto;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .content-inner h4 {
+        font-family: var(--font-sans);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 2.5rem 0 1rem;
+        color: var(--accent-coral);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .content-inner h4:first-child {
+        margin-top: 0;
+    }
+
+    .content-inner h5 {
+        font-family: var(--font-sans);
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin: 1.5rem 0 0.75rem;
+        color: var(--text-dark);
+        letter-spacing: 0.01em;
+    }
+
+    .content-inner p {
+        font-family: var(--font-serif);
+        font-size: 1.125rem;
+        line-height: 1.8;
+        color: var(--text-body);
+        margin-bottom: 1.25rem;
+    }
+
+    .principle-text {
+        font-family: var(--font-serif);
+        font-size: 1.375rem;
+        line-height: 1.8;
+        color: var(--text-dark);
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: rgba(136, 178, 112, 0.12);
+        border-left: 4px solid var(--bg-green);
+        border-radius: 0;
+    }
+
+    .principle-text em {
+        color: var(--accent-coral);
+        font-style: italic;
+        font-weight: 600;
+    }
+
+    /* Key Points */
+    .key-points {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2.5rem 0;
+    }
+
+    .point {
+        padding: 1.75rem;
+        background: rgba(136, 178, 112, 0.08);
+        border-radius: 0;
+        border-left: 3px solid var(--accent-coral);
+    }
+
+    .point h5 {
+        color: var(--accent-coral);
+        margin-top: 0;
+    }
+
+    .point p {
+        font-size: 1.0625rem;
+    }
+
+    /* Services List */
+    .services-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 2.5rem 0;
+    }
+
+    .service {
+        padding: 1.75rem;
+        background: rgba(136, 178, 112, 0.08);
+        border-radius: 0;
+        border-left: 3px solid var(--bg-green);
+    }
+
+    .service-icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .service h5 {
+        margin-top: 0;
+        color: var(--accent-coral);
+    }
+
+    .service p {
+        font-size: 1.0625rem;
+    }
+
+    /* Transformations List */
+    .transformations-list {
+        margin: 2.5rem 0;
+    }
+
+    .transformation {
+        padding: 1.75rem;
+        margin-bottom: 1.25rem;
+        background: rgba(136, 178, 112, 0.08);
+        border-radius: 0;
+        border-left: 4px solid var(--accent-coral);
+        display: flex;
+        gap: 1.25rem;
+        align-items: flex-start;
+    }
+
+    .transformation .number {
+        flex-shrink: 0;
+        width: 2.75rem;
+        height: 2.75rem;
+        background: var(--accent-coral);
+        color: var(--bg-cream);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-family: var(--font-sans);
+        font-size: 1.125rem;
+    }
+
+    .transformation h5 {
+        margin-top: 0;
+    }
+
+    .transformation p {
+        font-size: 1.0625rem;
+    }
+
+    /* Phases */
+    .phases {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 2.5rem 0;
+    }
+
+    .phase {
+        padding: 1.75rem;
+        background: rgba(136, 178, 112, 0.08);
+        border-radius: 0;
+        border-left: 3px solid var(--bg-green);
+    }
+
+    .phase h5 {
+        margin-top: 0;
+        color: var(--accent-coral);
+    }
+
+    .phase p {
+        font-size: 1.0625rem;
+    }
+
+    /* Hypothesis */
+    .hypothesis {
+        font-family: var(--font-serif);
+        font-size: 1.375rem;
+        line-height: 1.8;
+        padding: 2rem;
+        background: rgba(136, 178, 112, 0.12);
+        border-left: 4px solid var(--bg-green);
+        border-radius: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .falsifiability {
+        padding: 1.5rem 2rem;
+        background: rgba(217, 119, 87, 0.12);
+        border-left: 4px solid var(--accent-coral);
+        border-radius: 0;
+        margin-bottom: 2.5rem;
+        font-size: 1.0625rem;
+    }
+
+    /* Method Steps */
+    .method-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2.5rem 0;
+    }
+
+    .step {
+        padding: 1.75rem;
+        background: rgba(136, 178, 112, 0.08);
+        border-radius: 0;
+        border-left: 3px solid var(--bg-green);
+    }
+
+    .step-number {
+        display: inline-block;
+        width: 2.75rem;
+        height: 2.75rem;
+        background: var(--accent-coral);
+        color: var(--bg-cream);
+        border-radius: 50%;
+        text-align: center;
+        line-height: 2.75rem;
+        font-weight: 900;
+        font-family: var(--font-sans);
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+    }
+
+    .step h5 {
+        margin-top: 0;
+    }
+
+    .step p {
+        font-size: 1.0625rem;
+    }
+
+    /* Join Options */
+    .intro {
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        text-align: center;
+        margin-bottom: 2.5rem;
+        color: var(--text-body);
+        line-height: 1.8;
+    }
+
+    .join-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 2.5rem 0;
+    }
+
+    .option {
+        padding: 2rem;
+        background: rgba(136, 178, 112, 0.08);
+        border-radius: 0;
+        border-left: 3px solid var(--accent-coral);
+        text-align: center;
+    }
+
+    .option-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 1.25rem;
+    }
+
+    .option h5 {
+        margin-top: 0;
+        color: var(--accent-coral);
+    }
+
+    .option p {
+        font-size: 1.0625rem;
+    }
+
+    /* Path Steps */
+    .path-steps {
+        list-style: none;
+        counter-reset: step-counter;
+        margin: 2.5rem 0;
+        padding: 0;
+    }
+
+    .path-steps li {
+        counter-increment: step-counter;
+        padding: 1.25rem 1.25rem 1.25rem 4rem;
+        margin-bottom: 0.75rem;
+        background: rgba(136, 178, 112, 0.08);
+        border-radius: 0;
+        position: relative;
+        color: var(--text-body);
+        font-size: 1.0625rem;
+        line-height: 1.7;
+    }
+
+    .path-steps li::before {
+        content: counter(step-counter);
+        position: absolute;
+        left: 1.25rem;
+        width: 2.25rem;
+        height: 2.25rem;
+        background: var(--accent-coral);
+        color: var(--bg-cream);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1rem;
+        font-family: var(--font-sans);
+    }
+
+    /* Vision */
+    .vision {
+        margin-top: 3.5rem;
+        padding: 2.5rem;
+        background: rgba(136, 178, 112, 0.12);
+        border-radius: 0;
+        border-left: 4px solid var(--bg-green);
+    }
+
+    .vision h4 {
+        margin-top: 0;
+    }
+
+    .vision p {
+        font-size: 1.125rem;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--accent-coral);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .section-header {
+            padding: 2rem 1.5rem;
+        }
+
+        .section-title {
+            padding-right: 3rem;
+        }
+
+        .expand-icon {
+            right: 1.5rem;
+            font-size: 3rem;
+        }
+
+        .content-inner {
+            padding: 1.5rem 1.5rem 3rem;
+        }
+
+        .hero {
+            padding: 2rem 1.5rem;
+        }
+    }
+
+    /* Smooth Scroll */
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            scroll-behavior: smooth;
+        }
+    }
+
+    /* D3 Visualization Containers */
+    .viz-container {
+        margin: 2.5rem 0;
+        padding: 2rem;
+        background: rgba(136, 178, 112, 0.05);
+        border-radius: 4px;
+        border: 1px solid rgba(136, 178, 112, 0.2);
+    }
+
+    .viz-container svg {
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Math Legend */
+    .math-legend {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        border-top: 1px solid rgba(136, 178, 112, 0.2);
+        padding-top: 0.5rem;
+    }
+
+    /* Proposition Anchors */
+    .prop-anchor {
+        position: absolute;
+        left: -1.5rem;
+        top: 2rem;
+        /* Aligns with principle-text padding */
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        color: var(--accent-coral);
+        opacity: 0;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        user-select: none;
+    }
+
+    .principle-text {
+        position: relative;
+        /* Context for absolute anchor */
+    }
+
+    .principle-text:hover .prop-anchor,
+    .hypothesis:hover .prop-anchor,
+    .falsifiability:hover .prop-anchor,
+    .vision:hover .prop-anchor {
+        opacity: 0.6;
+    }
+
+    .prop-anchor:hover {
+        opacity: 1 !important;
+        transform: scale(1.1);
+    }
+
+    /* Toast Notification */
+    .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--text-dark);
+        color: var(--bg-cream);
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        font-family: var(--font-sans);
+        font-size: 0.875rem;
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        transform: translateY(1rem);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 10000;
+        pointer-events: none;
+    }
+
+    .toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="logo-squared.png" alt="Free Association Coalition Logo" class="hero-logo">
+            <h1>Free Association</h1>
+            <p class="hero-subtitle">Capacity-Allocation via Scientific Method</p>
+        </div>
+        <a href="#foundation" class="scroll-indicator" aria-label="Scroll to content">
+            <span class="scroll-arrow"></span>
+        </a>
+    </section>
+
+    <!-- Expandable Sections -->
+    <div class="accordion-container">
+
+        <!-- Foundation Section -->
+        <section class="accordion-section" id="foundation">
+            <button class="section-header" aria-expanded="false" aria-controls="principles">
+                <h3 class="section-title">Principles</h3>
+                <p class="section-subtitle">Proportional Distribution Under Bounded Constraints</p>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="principles">
+                <div class="content-inner">
+                    <h4>Universal Principles</h4>
+                    <p class="principle-text" id="prop-universal-principle">
+                        Society - and indeed any organization - must distribute its capacities across different
+                        activities in definite proportions in order to satisfy different wants/needs.
+                        This necessity cannot be done away with; what changes across contexts is only the
+                        <em>form</em>
+                        in which this proportional distribution of capacity asserts itself.
+                    </p>
+
+                    <div class="key-points">
+                        <div class="point">
+                            <h5>100% Bounded Constraint</h5>
+                            <p>Entities possess distinct finite capacities, each of which acts as a strict budget
+                                (summing to 100%). This constraint forces prioritization, making opportunity costs and
+                                scarcity signals visible.</p>
+                        </div>
+                        <div class="point">
+                            <h5>∞ Proportional Distributions</h5>
+                            <p>There are infinitely many ways to distribute capacity. Which works best? An empirical
+                                question discovered through experimentation.</p>
+                        </div>
+                    </div>
+
+                    <h4>The Core Hypothesis</h4>
+                    <p class="hypothesis" id="prop-core-hypothesis">
+                        Voluntary proportional distribution of capacity, with continuous dynamic adjustment based on
+                        feedback, produces better outcomes than coerced allocation.
+                    </p>
+                    <p class="falsifiability">
+                        <strong>Falsifiable:</strong> If voluntary distribution produces worse outcomes, the system
+                        will
+                        fail to attract participants.
+                    </p>
+
+                    <h4>What is "Voluntary"?</h4>
+                    <p class="principle-text" id="prop-voluntary-definition">
+                        <strong>Voluntary</strong> means each entity retains <em>unilateral sovereignty</em> over
+                        how
+                        its finite capacity is allocated in pursuit of its own goals. No external authority can
+                        compel
+                        an entity to allocate capacity to a particular recipient, and no recipient can impose a
+                        claim on
+                        another’s capacity.
+
+                        Capacity allocation is an intentional, goal-directed act: entities allocate capacity only
+                        where
+                        they judge it to contribute to the realization of their own objectives, and they retain the
+                        continuous right to revise or withdraw allocations based on observed outcomes.
+                    </p>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Science Section -->
+        <section class="accordion-section" id="science">
+            <button class="section-header" aria-expanded="false" aria-controls="science-content">
+                <h3 class="section-title">The Scientific Program</h3>
+                <p class="section-subtitle">Coordination as Scientific Capacity Allocation</p>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="science-content">
+                <div class="content-inner">
+
+                    <h4>The Scientific Method applied to Capacity Allocation</h4>
+                    <div class="method-steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <h5>Hypothesis Formation</h5>
+                            <p>Entity forms hypothesis about aligned capacity allocation</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <h5>Implementation</h5>
+                            <p>Entity allocates capacity according to hypothesis</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <h5>Measurement</h5>
+                            <p>Observe actual results</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <h5>Testing</h5>
+                            <p>Compare predicted to actual outcomes</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">5</span>
+                            <h5>Adjustment</h5>
+                            <p>Update allocations and their determination procedures based on evidence</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">6</span>
+                            <h5>Sharing</h5>
+                            <p>Successful patterns spread through imitation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Velocity Section -->
+        <section class="accordion-section" id="velocity">
+            <button class="section-header" aria-expanded="false" aria-controls="velocity-content">
+                <h3 class="section-title">Velocity</h3>
+                <p class="section-subtitle">Correction Velocity and Infrastructure</p>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="velocity-content">
+                <div class="content-inner">
+                    <h4>Correction Velocity: The Core Metric</h4>
+                    <p class="principle-text" id="prop-correction-velocity">
+                        Every moment of misallocation is lost goal achievement. <em>Correction velocity</em> is the
+                        speed at which falsified capacity-allocation hypotheses are discarded and replaced with more
+                        optimal ones.
+                    </p>
+                    <p style="margin-bottom: 1.5rem;">
+                        Entities are incentivized to: (1) <strong>Discover</strong> misallocations as fast as possible,
+                        (2) <strong>Correct</strong> them immediately, and (3) <strong>Uphold</strong> conditions that
+                        enable fast discovery and correction.
+                    </p>
+                    <p style="margin-bottom: 2rem;" id="prop-max-velocity">
+                        <strong>Maximizing correction velocity is the key to organizational resilience and optimal
+                            capacity-allocation.</strong>
+                    </p>
+
+                    <!-- Correction Velocity Visualization -->
+                    <div class="viz-container" id="correction-velocity-viz"></div>
+
+                    <h4>Infrastructure Conditions</h4>
+                    <p class="intro">What conditions maximize correction velocity? We hypothesize that the following
+                        five conditions are critical (though this list may not be exhaustive):</p>
+                    <div class="key-points">
+                        <div class="point">
+                            <h5>1. Transparency</h5>
+                            <p>Real-time visibility into allocations and outcomes</p>
+                        </div>
+                        <div class="point">
+                            <h5>2. Sovereignty</h5>
+                            <p>Unilateral power to reallocate capacity instantly</p>
+                        </div>
+                        <div class="point">
+                            <h5>3. Revocability</h5>
+                            <p>Instant withdrawal of allocation, no lock-in</p>
+                        </div>
+                        <div class="point">
+                            <h5>4. Discovery Infrastructure</h5>
+                            <p>Low-friction mechanisms to find better partners</p>
+                        </div>
+                        <div class="point">
+                            <h5>5. Low Switching Costs</h5>
+                            <p>Minimal transaction costs for reallocation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Alignment Section -->
+        <section class="accordion-section" id="alignment">
+            <button class="section-header" aria-expanded="false" aria-controls="alignment-content">
+                <h3 class="section-title">Alignment</h3>
+                <p class="section-subtitle">Capacity-Direction and (Mis)-Alignment</p>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="alignment-content">
+                <div class="content-inner">
+                    <h4>Allignment and Sustainability</h4>
+
+                    <p class="principle-text" id="prop-alignment-definition">
+                        Agents possess diverse and finite capacities. <strong>Alignment</strong> exists when an agent
+                        directs its capacities toward social–material relations that reliably contribute to the
+                        realization of the goals that organize and sustain its agency over time.
+                    </p>
+                    <p class="principle-text" id="prop-relational-conditions">
+                        Goals are not realized in isolation. They depend on material, temporal, technological,
+                        and organizational conditions that structure how agents relate to the world and to one
+                        another. These conditions are actively produced and reproduced through ongoing
+                        social–material relations sustained by capacity allocation.
+                    </p>
+                    <p class="principle-text" id="prop-alignment-reproduction">
+                        From this perspective, alignment names a condition of <em>reproduction</em>: capacity is
+                        directed in ways that maintain, renew, and expand the very relations that make future
+                        goal realization possible. An aligned agent not only achieves its goals, but sustains the
+                        relational conditions upon which its continued agency depends.
+                    </p>
+                    <p class="falsifiability" id="prop-unsustainability">
+                        <strong>Unsustainability</strong> appears when agents fail to direct their capacities in ways
+                        that maintain, renew, and expand the very relations that make future goal realization
+                        possible. Misalignment is an empirically detectable breakdown in relational reproduction.
+                    </p>
+                </div>
+            </div>
+    </div>
+    </div>
+    </section>
+
+    <!-- Social Capacity Section -->
+    <section class="accordion-section" id="social-capacity">
+        <button class="section-header" aria-expanded="false" aria-controls="social-capacity-content">
+            <h3 class="section-title">Social Capacity</h3>
+            <p class="section-subtitle">The Indefinite Expansion of Possibility</p>
+            <span class="expand-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="section-content" id="social-capacity-content">
+            <div class="content-inner">
+                <h4>When Capacity Becomes Social</h4>
+
+                <p class="principle-text">
+                    As productive systems develop, the realization of goals depends less on isolated acts of
+                    direct effort and increasingly on accumulated capacities embodied in scientific knowledge,
+                    technological systems, organizational structures, and social coordination. Individual
+                    capacity no longer produces outcomes directly; it activates and regulates systems whose
+                    productive power exceeds the effort required to engage them.
+                </p>
+
+                <p class="principle-text">
+                    In this regime, outcomes are no longer proportional to direct contribution alone. Instead,
+                    they depend on how individual capacity is aligned with social–material relations that
+                    amplify its effectiveness.
+                </p>
+
+                <div class="math-block">
+                    $$
+                    O_i \;=\; C_i \cdot A_i
+                    $$
+                    <div class="math-legend">
+                        Where: <br>
+                        $O_i$ = outcome realized by agent $i$ <br>
+                        $C_i$ = capacity directed by agent $i$ <br>
+                        $A_i$ = amplification generated by the social–material relations engaged
+                    </div>
+                </div>
+
+                <p class="principle-text">
+                    As social capacity develops, amplification grows faster than direct capacity. The relation
+                    between effort and outcome becomes nonlinear: small, well-aligned contributions can
+                    generate disproportionately large effects, while large but poorly aligned efforts may
+                    yield little result.
+                </p>
+
+                <div class="math-block">
+                    $$
+                    \frac{\partial O}{\partial C} \;\propto\; A
+                    $$
+                    <div class="math-legend">
+                        The marginal effectiveness of capacity increases with social amplification.
+                    </div>
+                </div>
+
+                <h4>Proportionality Without Direct Measurement</h4>
+
+                <p class="principle-text">
+                    Although outcomes cease to be proportional to labor time or effort, proportionality does
+                    not disappear. It shifts from proportionality of contribution to proportionality of
+                    alignment. Relative outcomes correspond to relative positions within amplifying
+                    social–material relations.
+                </p>
+
+                <div class="math-block">
+                    $$
+                    \frac{O_i}{O_j} \;\approx\; \frac{A_i}{A_j}
+                    $$
+                    <div class="math-legend">
+                        Outcome ratios track alignment ratios, not effort ratios.
+                    </div>
+                </div>
+
+                <p class="principle-text">
+                    Alignment here does not mean consensus or centralized coordination. It refers to whether
+                    agents can sustain access to, participate in, and direct capacity through relations that
+                    generate amplification in pursuit of their own goals.
+                </p>
+
+                <h4>Relational Production</h4>
+
+                <p class="principle-text">
+                    Once productive power becomes socially embedded, outcomes arise from networks of relations
+                    rather than isolated acts. Each agent’s results reflect how their capacity intersects with
+                    multiple amplifying relations simultaneously.
+                </p>
+
+                <div class="math-block">
+                    $$
+                    O_i \;=\; \sum_{r \in R_i} C_i \cdot \alpha_{ir} \cdot A_r
+                    $$
+                    <div class="math-legend">
+                        Where: <br>
+                        $R_i$ = relations agent $i$ participates in <br>
+                        $\alpha_{ir}$ = degree of alignment with relation $r$ <br>
+                        $A_r$ = amplification power of relation $r$
+                    </div>
+                </div>
+
+                <p class="principle-text">
+                    Sustainability depends on whether agents who benefit from these relations retain viable
+                    pathways to reciprocally sustain them. Misalignment appears not as lack of effort, but as
+                    exclusion from or degradation of the relations that generate outcomes.
+                </p>
+
+                <h4>The Infinite Horizon</h4>
+
+                <p class="principle-text">
+                    As social capacity grows, the number of possible relations, configurations, and cooperative
+                    arrangements expands faster than any fixed metric of contribution. The space of possible
+                    alignments becomes effectively unbounded.
+                </p>
+
+                <div class="math-block">
+                    $$
+                    |R| \;\to\; \infty \quad \Rightarrow \quad |A| \;\to\; \infty
+                    $$
+                    <div class="math-legend">
+                        The expansion of social relations produces an open-ended space of possible alignments.
+                    </div>
+                </div>
+
+                <p class="principle-text" style="font-weight:700; color: var(--accent-coral); margin-top:1.5rem;">
+                    The horizon is not the elimination of necessity, but the indefinite expansion of how
+                    capacities may be aligned with the relations that amplify them.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Allocation Section -->
+    <section class="accordion-section" id="allocation">
+        <button class="section-header" aria-expanded="false" aria-controls="allocation-content">
+            <h3 class="section-title">Allocation</h3>
+            <p class="section-subtitle">The Constrained Weighted Allocation Problem</p>
+            <span class="expand-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="section-content" id="allocation-content">
+            <div class="content-inner">
+                <h4>The Allocation Problem</h4>
+                <p class="principle-text" id="prop-allocation-problem">
+                    Entities have <strong>needs</strong> (goals whose realization depends on capacity) and
+                    <strong>availabilities</strong> (capacities they can provide). The challenge is
+                    multi-provider, multi-recipient need satisfaction under constraints:
+                </p>
+                <div class="math-block">
+                    $$ \text{Find } \mathbf{X} \text{ s.t. } \forall i, \sum_j X_{ij} \le C_i \land \forall j, \sum_i
+                    X_{ij} \le N_j $$
+                    <div class="math-legend">
+                        Where: $\mathbf{X}$ = Allocation matrix ($X_{ij}$ is capacity from $i$ to $j$), $C_i$ = Capacity
+                        of provider $i$, $N_j$ = Need of recipient $j$.
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <div class="point">
+                        <h5>Provider Constraints</h5>
+                        <p>Each provider has finite capacities (each summing to 100%) to distribute among compatible
+                            recipients. They
+                            prefer to allocate to needs they value most highly.</p>
+                    </div>
+                    <div class="point">
+                        <h5>Recipient Constraints</h5>
+                        <p>Each recipient has specific needs with finite capacity requirements. They prefer to
+                            receive from providers they trust/value most highly.</p>
+                    </div>
+                    <div class="point">
+                        <h5>Two-Sided Optimization</h5>
+                        <p>The system must simultaneously satisfy provider preferences (allocate to valued needs)
+                            and recipient preferences (receive from valued providers) while respecting capacity/need
+                            limits.</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1.5rem; margin-bottom: 1.5rem;" id="prop-constrained-weighted">
+                    This is a <strong>constrained weighted allocation problem</strong>: finding the allocation
+                    matrix that minimizes deviation from both providers' priorities and recipients' source
+                    preferences, subject to capacity and need constraints.
+                </p>
+                <div class="math-block">
+                    $$ \min_{\mathbf{X}} \sum_{i,j} \left( \Phi(X_{ij}, P_{ij}) + \Psi(X_{ij}, R_{ji}) \right) $$
+                    <div class="math-legend">
+                        Where: $P_{ij}$ = Priority provider $i$ assigns to $j$, $R_{ji}$ = Preference recipient $j$ has
+                        for $i$, $\Phi,\Psi$ = Cost functions.
+                    </div>
+                </div>
+
+                <p class="falsifiability" id="prop-key-mechanism">
+                    <strong>Key Mechanism:</strong> The protocol finds the allocation matrix that satisfies all
+                    capacity and need constraints while remaining as close as possible to the expressed preferences
+                    of both providers and recipients. This is the <em>least biased</em> solution - it doesn't impose
+                    any preference beyond what entities themselves express. The system converges to this solution
+                    through iterative constraint satisfaction, where capacity and need limits are enforced while
+                    preserving the proportional relationships in the expressed preferences.
+                </p>
+                <div class="math-block">
+                    $$ \frac{X_{ij}}{X_{ik}} \approx \frac{P_{ij}}{P_{ik}} $$
+                    <div class="math-legend">
+                        Where: The ratio of allocations approximates the ratio of expressed priorities (Proportional
+                        Preservation).
+                    </div>
+                </div>
+
+                <h4>Proportionality Properties</h4>
+                <p class="principle-text">
+                    The allocation mechanism has several important mathematical properties that emerge from
+                    constraint satisfaction:
+                </p>
+
+                <div class="key-points">
+                    <div class="point">
+                        <h5>Proportional Preservation</h5>
+                        <p>If you express that Need A is twice as aligned as Need B, the system allocates
+                            approximately twice as much capacity to A (when feasible given constraints). The
+                            proportional relationships you express are preserved in the final allocation.</p>
+                    </div>
+                    <div class="point">
+                        <h5>Least Biased Solution</h5>
+                        <p>Among all possible allocations that satisfy the constraints, the system selects the one
+                            that introduces the least additional bias beyond what entities express. This is the
+                            entropy-maximizing (information-theoretically optimal) solution.</p>
+                    </div>
+                    <div class="point">
+                        <h5>Constraint Propagation</h5>
+                        <p>When constraints bind (e.g., a recipient reaches capacity), the effects propagate through
+                            the network. Capacity that cannot flow to a full recipient automatically redistributes
+                            to other compatible needs according to expressed preferences.</p>
+                    </div>
+                    <div class="point">
+                        <h5>Equilibrium Convergence</h5>
+                        <p>The system converges to a stable equilibrium where no entity can improve their allocation
+                            quality (measured by preference satisfaction) without degrading someone else's. This is
+                            a Pareto-efficient outcome.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Transformation Section -->
+    <section class="accordion-section" id="transformation">
+        <button class="section-header" aria-expanded="false" aria-controls="transformation-content">
+            <h3 class="section-title">The Transformation</h3>
+            <p class="section-subtitle">From Coerced Procedures to Voluntary Coordination</p>
+            <span class="expand-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="section-content" id="transformation-content">
+            <div class="content-inner">
+                <h4>Five Key Transformations</h4>
+                <div class="transformations-list">
+                    <div class="transformation">
+                        <span class="number">1</span>
+                        <h5>Voluntary Contribution Substitutes Coerced Labor</h5>
+                        <p>Organizational priorities realized through voluntary contribution as the primary
+                            mechanism.</p>
+                    </div>
+                    <div class="transformation">
+                        <span class="number">2</span>
+                        <h5>Coerced Contribution Mechanisms Dramatically Reduced</h5>
+                        <p>As freely-associating coverage expands, coerced contribution (taxation, mandatory labor)
+                            decreases proportionally while maintaining/improving service quality and goal-acheivement.
+                        </p>
+                    </div>
+                    <div class="transformation">
+                        <span class="number">3</span>
+                        <h5>Procedures Through Voluntary Capacity Direction</h5>
+                        <p>Application of organizational procedures (laws, rules, protocols) depends on voluntary
+                            capacity direction, making organizational priorities accountable to participant values.</p>
+                    </div>
+                    <div class="transformation">
+                        <span class="number">4</span>
+                        <h5>Organizations Become Free</h5>
+                        <p>Organizations operate through voluntary association rather than coercion. Participants
+                            directly
+                            shape organizational function.</p>
+                    </div>
+                    <div class="transformation">
+                        <span class="number">5</span>
+                        <h5>Coordination Becomes Scientific</h5>
+                        <p>Scientific capacity-allocation replaces ideological struggle, enabling continuous discovery
+                            of effective coordination patterns.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Join Section -->
+    <section class="accordion-section" id="join">
+        <button class="section-header" aria-expanded="false" aria-controls="join-content">
+            <h3 class="section-title">Join the Coalition</h3>
+            <p class="section-subtitle">Experiment. Contribute. Learn.</p>
+            <span class="expand-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="section-content" id="join-content">
+            <div class="content-inner">
+                <p class="intro">
+                    This is not utopian fantasy but scientific hypothesis - testable, falsifiable, and subject to
+                    empirical
+                    validation.
+                </p>
+
+                <div class="join-options">
+                    <div class="option">
+                        <span class="option-icon">🔬</span>
+                        <h5>Experiment</h5>
+                        <p>Start a local coalition in your domain. Test the hypothesis. Measure outcomes.</p>
+                    </div>
+                    <div class="option">
+                        <span class="option-icon">🤝</span>
+                        <h5>Contribute</h5>
+                        <p>Allocate your capacity to your priorities.</p>
+                    </div>
+                    <div class="option">
+                        <span class="option-icon">📖</span>
+                        <h5>Learn</h5>
+                        <p>Dive deeper into the framework. Understand the mathematical foundations.</p>
+                    </div>
+                    <div class="option">
+                        <span class="option-icon">💻</span>
+                        <h5>Develop</h5>
+                        <p>Build on the protocol.</p>
+                        <div
+                            style="background: rgba(38, 51, 8, 0.8); color: #fff; padding: 0.75rem; border-radius: 4px; font-family: monospace; font-size: 0.9rem; margin-top: 0.5rem; text-align: left;">
+                            npm i <a href="https://www.npmjs.com/package/@playnet/free-association" target="_blank"
+                                style="color: #fff; text-decoration: underline;">@playnet/free-association</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>The Path Forward</h4>
+                <ol class="path-steps">
+                    <li>Start with small local coalitions in specific domains</li>
+                    <li>Demonstrate effectiveness through measurable outcomes</li>
+                    <li>Attract participants through voluntary appeal</li>
+                    <li>Scale successful patterns to larger domains</li>
+                    <li>Gradually substitute for coerced capacity provisioning where effective</li>
+                    <li>Reduce coerced contribution (taxation, mandatory labor) proportionally to successful
+                        substitution</li>
+                    <li>Transform organizations into coordination platform for voluntary association</li>
+                </ol>
+
+                <div class="vision">
+                    <h4>The Vision</h4>
+                    <p>
+                        A civilization where the fulfillment of needs and the pursuit of goals are no longer directed
+                        by force,
+                        but coordinated through the free alignment of capacity. By making the social direction of
+                        production legible,
+                        voluntary, and scientifically adjustable, we do not just 'fix' organizations — we unleash the
+                        collective
+                        intelligence of the species. This is the transition from the administration of scarcity to the
+                        organization
+                        of abundance; from the history of coercion to the future of free association.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div>
+
+
+    <script>
+        // Accordion functionality for expanding sections
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.accordion-section');
+
+            sections.forEach(section => {
+                const header = section.querySelector('.section-header');
+                const content = section.querySelector('.section-content');
+
+                // Click handler
+                header.addEventListener('click', () => {
+                    toggleSection(section, header, content);
+                });
+
+                // Keyboard accessibility
+                header.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleSection(section, header, content);
+                    }
+                });
+            });
+
+            // Check URL hash on load
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection && targetSection.classList.contains('accordion-section')) {
+                    const header = targetSection.querySelector('.section-header');
+                    const content = targetSection.querySelector('.section-content');
+                    expandSection(targetSection, header, content);
+                }
+            }
+        });
+
+        function toggleSection(section, header, content) {
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+
+            if (isExpanded) {
+                collapseSection(section, header, content);
+            } else {
+                expandSection(section, header, content);
+
+                // Immediate, gentle scroll to ensure visibility
+                section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function expandSection(section, header, content) {
+            header.setAttribute('aria-expanded', 'true');
+            content.classList.add('expanded');
+        }
+
+        function collapseSection(section, header, content) {
+            header.setAttribute('aria-expanded', 'false');
+            content.classList.remove('expanded');
+        }
+
+        function collapseAllSections() {
+            const allSections = document.querySelectorAll('.accordion-section');
+            allSections.forEach(section => {
+                const header = section.querySelector('.section-header');
+                const content = section.querySelector('.section-content');
+                collapseSection(section, header, content);
+            });
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', () => {
+            collapseAllSections();
+
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection && targetSection.classList.contains('accordion-section')) {
+                    const header = targetSection.querySelector('.section-header');
+                    const content = targetSection.querySelector('.section-content');
+                    expandSection(targetSection, header, content);
+                }
+            }
+        });
+
+        // Scroll indicator click handler
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (scrollIndicator) {
+            scrollIndicator.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = scrollIndicator.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        }
+
+        // Deep Linking Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Inject Anchors
+            const propositions = document.querySelectorAll('[id^="prop-"]');
+
+            propositions.forEach(prop => {
+                // Ensure the parent has relative positioning if it's one of our target classes
+                // (Already handled in CSS for .principle-text, but good for safety)
+
+                const anchor = document.createElement('a');
+                anchor.className = 'prop-anchor';
+                anchor.innerHTML = '&sect;'; // Section sign §
+                anchor.href = '#' + prop.id;
+                anchor.title = 'Copy link to this section';
+
+                // For proper positioning, we might need to adjust based on element type
+                // But CSS absolute positioning related to the padding should work for standard blocks
+
+                anchor.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    // Update URL
+                    history.pushState(null, null, '#' + prop.id);
+
+                    // Copy to clipboard
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url).then(() => {
+                        showToast('Link copied to clipboard');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                    });
+
+                    // Scroll into view (optional as we are already there, but good for focus)
+                    prop.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+
+                prop.prepend(anchor);
+            });
+
+            // 2. Toast Notification System
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            document.body.appendChild(toast);
+
+            let toastTimeout;
+
+            window.showToast = function (message) {
+                toast.textContent = message;
+                toast.classList.add('visible');
+
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('visible');
+                }, 3000);
+            };
+        });
+
+    </script>
+    <script>
+        /**
+         * D3 Visualizations for Free Association Coalition Website
+         * Simple, elegant demonstrations of core concepts
+         * Based on the mathematical framework from new-commons-ipf.tex
+         */
+
+        // Global state for reactive visualizations
+        let globalTruePercent = 0.7; // 70% true recognition initially
+
+        // ============================================================================
+        // 1. ALLOCATION EFFECTIVENESS VISUALIZATION
+        // ============================================================================
+
+        function createTrueFalseRecognitionViz(containerId) {
+            const container = d3.select(`#${containerId}`);
+            const width = Math.min(600, container.node().getBoundingClientRect().width);
+            const height = 180;
+            const margin = { top: 20, right: 20, bottom: 80, left: 20 };
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const barHeight = 40;
+            const barY = 50;
+            const barWidth = width - margin.left - margin.right;
+
+            // Initial allocation: 70% to beneficial, 30% to non-beneficial
+            let beneficialPercent = globalTruePercent;
+
+            // Beneficial section (green) - T(a,B)
+            const beneficialRect = svg.append('rect')
+                .attr('x', margin.left)
+                .attr('y', barY)
+                .attr('width', beneficialPercent * barWidth)
+                .attr('height', barHeight)
+                .attr('fill', '#88b270')
+                .attr('rx', 4);
+
+            // Non-beneficial section (red) - T(a,N)
+            const nonBeneficialRect = svg.append('rect')
+                .attr('x', margin.left + beneficialPercent * barWidth)
+                .attr('y', barY)
+                .attr('width', (1 - beneficialPercent) * barWidth)
+                .attr('height', barHeight)
+                .attr('fill', '#d97757')
+                .attr('rx', 4);
+
+            // Divider line (slider knob)
+            const divider = svg.append('line')
+                .attr('x1', margin.left + beneficialPercent * barWidth)
+                .attr('x2', margin.left + beneficialPercent * barWidth)
+                .attr('y1', barY - 10)
+                .attr('y2', barY + barHeight + 10)
+                .attr('stroke', '#263308')
+                .attr('stroke-width', 4)
+                .attr('cursor', 'ew-resize')
+                .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))');
+
+            // Labels on the bar
+            const beneficialLabel = svg.append('text')
+                .attr('x', margin.left + 10)
+                .attr('y', barY + barHeight / 2)
+                .attr('dy', '0.35em')
+                .attr('fill', 'white')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-weight', 600)
+                .attr('font-size', '12px')
+                .text('Effective');
+
+            const nonBeneficialLabel = svg.append('text')
+                .attr('x', width - margin.right - 10)
+                .attr('y', barY + barHeight / 2)
+                .attr('dy', '0.35em')
+                .attr('text-anchor', 'end')
+                .attr('fill', 'white')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-weight', 600)
+                .attr('font-size', '12px')
+                .text('Ineffective');
+
+            // Calculate Allocation Effectiveness and P(G)
+            function calculateMetrics(beneficial) {
+                const nonBeneficial = 1 - beneficial;
+                const effectiveness = nonBeneficial > 0 ? beneficial / nonBeneficial : Infinity;
+                // P(G) as a function of beneficial allocation
+                // Higher allocation to beneficial partners → Higher P(G)
+                const pG = beneficial; // Simplified: P(G) increases linearly with beneficial allocation
+                return { effectiveness, pG };
+            }
+
+            const metrics = calculateMetrics(beneficialPercent);
+
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 15)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '13px')
+                .attr('font-weight', 700)
+                .text('Capacity Allocation Budget');
+
+            // Percentage display
+            const percentText = svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', barY + barHeight + 25)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '11px')
+                .text(`Effective = ${Math.round(beneficialPercent * 100)}% | Ineffective = ${Math.round((1 - beneficialPercent) * 100)}%`);
+
+            // Allocation Effectiveness display
+            const effectivenessText = svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', barY + barHeight + 45)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#88b270')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '12px')
+                .attr('font-weight', 600)
+                .text(`Allocation Effectiveness = ${metrics.effectiveness.toFixed(2)}`);
+
+            // P(G) display
+            const pgText = svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', barY + barHeight + 65)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '12px')
+                .attr('font-weight', 700)
+                .text(`P(G) ≈ ${(metrics.pG * 100).toFixed(0)}%`);
+
+            // Instruction text
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 35)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#3a4a1a')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '10px')
+                .attr('font-style', 'italic')
+                .text('Drag to adjust capacity allocation between effective and ineffective');
+
+            // Drag behavior
+            const drag = d3.drag()
+                .on('drag', function (event) {
+                    const x = Math.max(margin.left, Math.min(width - margin.right, event.x));
+                    beneficialPercent = (x - margin.left) / barWidth;
+                    globalTruePercent = beneficialPercent; // Update global state
+
+                    // Update rectangles
+                    beneficialRect.attr('width', beneficialPercent * barWidth);
+                    nonBeneficialRect
+                        .attr('x', margin.left + beneficialPercent * barWidth)
+                        .attr('width', (1 - beneficialPercent) * barWidth);
+
+                    // Update divider
+                    divider
+                        .attr('x1', x)
+                        .attr('x2', x);
+
+                    // Recalculate metrics
+                    const newMetrics = calculateMetrics(beneficialPercent);
+
+                    percentText.text(`Effective = ${Math.round(beneficialPercent * 100)}% | Ineffective = ${Math.round((1 - beneficialPercent) * 100)}%`);
+
+                    const effectivenessDisplay = newMetrics.effectiveness === Infinity ? '∞' : newMetrics.effectiveness.toFixed(2);
+                    effectivenessText.text(`Allocation Effectiveness = ${effectivenessDisplay}`);
+
+                    pgText.text(`P(G) ≈ ${(newMetrics.pG * 100).toFixed(0)}%`);
+
+                    // Update correction velocity visualization reactively
+                    updateCorrectionVelocity();
+                });
+
+            divider.call(drag);
+        }
+
+
+        // ============================================================================
+        // 2. BENEFIT GRADIENT VISUALIZATION (Horizontal Bar)
+        // ============================================================================
+
+        function createBenefitGradientViz(containerId) {
+            const container = d3.select(`#${containerId}`);
+            const width = Math.min(600, container.node().getBoundingClientRect().width);
+            const height = 120;
+            const margin = { top: 30, right: 40, bottom: 40, left: 40 };
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const barHeight = 40;
+            const barY = (height - barHeight) / 2;
+            const barWidth = width - margin.left - margin.right;
+
+            // Scale for benefit gradient (-1 to +1)
+            const xScale = d3.scaleLinear()
+                .domain([-1, 1])
+                .range([margin.left, width - margin.right]);
+
+            // Create gradient for the bar
+            const defs = svg.append('defs');
+            const gradient = defs.append('linearGradient')
+                .attr('id', 'benefit-gradient')
+                .attr('x1', '0%')
+                .attr('x2', '100%');
+
+            gradient.append('stop')
+                .attr('offset', '0%')
+                .attr('stop-color', '#d97757'); // Red (harmful)
+
+            gradient.append('stop')
+                .attr('offset', '50%')
+                .attr('stop-color', '#f4eed8'); // Neutral
+
+            gradient.append('stop')
+                .attr('offset', '100%')
+                .attr('stop-color', '#88b270'); // Green (beneficial)
+
+            // Background bar
+            svg.append('rect')
+                .attr('x', margin.left)
+                .attr('y', barY)
+                .attr('width', barWidth)
+                .attr('height', barHeight)
+                .attr('fill', 'url(#benefit-gradient)')
+                .attr('rx', 4);
+
+            // Zero line (vertical divider at β = 0)
+            const zeroX = xScale(0);
+            svg.append('line')
+                .attr('x1', zeroX)
+                .attr('x2', zeroX)
+                .attr('y1', barY - 5)
+                .attr('y2', barY + barHeight + 5)
+                .attr('stroke', '#263308')
+                .attr('stroke-width', 2)
+                .attr('stroke-dasharray', '4,4')
+                .attr('opacity', 0.7);
+
+            // Labels
+            svg.append('text')
+                .attr('x', margin.left + 10)
+                .attr('y', barY + barHeight / 2)
+                .attr('dy', '0.35em')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-weight', 600)
+                .attr('font-size', '12px')
+                .text('β < 0');
+
+            svg.append('text')
+                .attr('x', width - margin.right - 10)
+                .attr('y', barY + barHeight / 2)
+                .attr('dy', '0.35em')
+                .attr('text-anchor', 'end')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-weight', 600)
+                .attr('font-size', '12px')
+                .text('β > 0');
+
+            // Axis
+            const axis = d3.axisBottom(xScale).ticks(5);
+            svg.append('g')
+                .attr('transform', `translate(0,${barY + barHeight + 10})`)
+                .call(axis)
+                .style('font-family', 'Inter, sans-serif')
+                .style('font-size', '10px');
+
+            // Title
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 15)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '12px')
+                .attr('font-weight', 600)
+                .text('Net-Benefit Gradient (β)');
+
+            // Description labels
+            svg.append('text')
+                .attr('x', margin.left)
+                .attr('y', barY - 10)
+                .attr('fill', '#d97757')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '10px')
+                .attr('font-weight', 600)
+                .text('Harmful');
+
+            svg.append('text')
+                .attr('x', width - margin.right)
+                .attr('y', barY - 10)
+                .attr('text-anchor', 'end')
+                .attr('fill', '#88b270')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '10px')
+                .attr('font-weight', 600)
+                .text('Beneficial');
+        }
+
+        // ============================================================================
+        // 3. CORRECTION VELOCITY ANIMATION (Interactive Simulation)
+        // ============================================================================
+
+        let correctionVelocitySvg = null;
+        let correctionVelocityContainer = null;
+        let animationState = {
+            isPlaying: false,
+            currentVelocity: 0, // Start at 0
+            targetVelocity: 2.0, // Asymptote - much higher to show rapid correction is possible
+            animationFrame: null,
+            startTime: null
+        };
+
+        function createCorrectionVelocityViz(containerId) {
+            const container = d3.select(`#${containerId}`);
+            correctionVelocityContainer = container;
+
+            const width = Math.min(600, container.node().getBoundingClientRect().width);
+            const height = 250;
+            const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+
+            // Create play button
+            const buttonContainer = container.append('div')
+                .style('text-align', 'center')
+                .style('margin-bottom', '10px');
+
+            const playButton = buttonContainer.append('button')
+                .attr('id', 'velocity-play-button')
+                .style('padding', '10px 24px')
+                .style('font-size', '14px')
+                .style('font-weight', '600')
+                .style('background', '#88b270')
+                .style('color', 'white')
+                .style('border', 'none')
+                .style('border-radius', '4px')
+                .style('cursor', 'pointer')
+                .style('font-family', 'Inter, sans-serif')
+                .style('transition', 'background 0.2s')
+                .text('▶ Play Simulation')
+                .on('click', toggleAnimation)
+                .on('mouseover', function () {
+                    if (!animationState.isPlaying) {
+                        d3.select(this).style('background', '#6d9058');
+                    }
+                })
+                .on('mouseout', function () {
+                    if (!animationState.isPlaying) {
+                        d3.select(this).style('background', '#88b270');
+                    }
+                });
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            correctionVelocitySvg = svg;
+
+            // Initial render
+            renderCorrectionVelocityAnimation(width, height, margin);
+        }
+
+        function renderCorrectionVelocityAnimation(width, height, margin) {
+            const svg = correctionVelocitySvg;
+            if (!svg) return;
+
+            // Clear previous content
+            svg.selectAll('*').remove();
+
+            const timeSteps = 50;
+            const currentVelocity = animationState.currentVelocity;
+
+            // Scales
+            const xScale = d3.scaleLinear()
+                .domain([0, timeSteps - 1])
+                .range([margin.left, width - margin.right]);
+
+            const yScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([height - margin.bottom, margin.top]);
+
+            // Generate data based on current velocity
+            // error(t) = error_0 * exp(-λ * t)
+            const data = Array.from({ length: timeSteps }, (_, i) => ({
+                time: i,
+                error: 100 * Math.exp(-currentVelocity * i)
+            }));
+
+            // Line generator
+            const line = d3.line()
+                .x(d => xScale(d.time))
+                .y(d => yScale(d.error))
+                .curve(d3.curveMonotoneX);
+
+            // Color based on velocity (red -> green)
+            const velocityNormalized = Math.min(currentVelocity / animationState.targetVelocity, 1);
+            const color = d3.interpolateRgb('#d97757', '#88b270')(velocityNormalized);
+
+            // Draw the correction curve
+            const path = svg.append('path')
+                .datum(data)
+                .attr('fill', 'none')
+                .attr('stroke', color)
+                .attr('stroke-width', 3)
+                .attr('d', line)
+                .style('filter', 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))');
+
+            // Axes
+            const xAxis = d3.axisBottom(xScale).ticks(5);
+            const yAxis = d3.axisLeft(yScale).ticks(5);
+
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(xAxis)
+                .style('font-family', 'Inter, sans-serif')
+                .style('font-size', '10px');
+
+            svg.append('g')
+                .attr('transform', `translate(${margin.left},0)`)
+                .call(yAxis)
+                .style('font-family', 'Inter, sans-serif')
+                .style('font-size', '10px');
+
+            // Axis labels
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', height - 5)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '11px')
+                .text('Time Steps');
+
+            svg.append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -height / 2)
+                .attr('y', 15)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '11px')
+                .text('Misallocation Error (%)');
+
+            // Title with current velocity
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#263308')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '13px')
+                .attr('font-weight', 700)
+                .text('Correction Velocity Simulation');
+
+            // Velocity display
+            const approachingText = currentVelocity >= animationState.targetVelocity * 0.99 ? ' (approaching asymptote)' : '';
+            svg.append('text')
+                .attr('x', width / 2)
+                .attr('y', 38)
+                .attr('text-anchor', 'middle')
+                .attr('fill', color)
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-size', '12px')
+                .attr('font-weight', 600)
+                .text(`λ = ${currentVelocity.toFixed(3)}${approachingText}`);
+        }
+
+        function toggleAnimation() {
+            const button = d3.select('#velocity-play-button');
+
+            if (animationState.isPlaying) {
+                // Pause
+                animationState.isPlaying = false;
+                if (animationState.animationFrame) {
+                    cancelAnimationFrame(animationState.animationFrame);
+                }
+                button.text('▶ Play Simulation')
+                    .style('background', '#88b270');
+            } else {
+                // Play
+                animationState.isPlaying = true;
+                animationState.startTime = performance.now();
+                button.text('⏸ Pause')
+                    .style('background', '#d97757');
+                animateVelocity();
+            }
+        }
+
+        function animateVelocity() {
+            if (!animationState.isPlaying) return;
+
+            const now = performance.now();
+            const elapsed = (now - animationState.startTime) / 1000; // seconds
+
+            // Asymptotic approach: v(t) = v_max * (1 - exp(-k*t))
+            // This starts at 0 and approaches v_max asymptotically
+            const k = 0.15; // Rate of approach to asymptote (REDUCED from 0.8 to make it slower)
+            animationState.currentVelocity = animationState.targetVelocity * (1 - Math.exp(-k * elapsed));
+
+            // Re-render
+            const width = parseInt(correctionVelocitySvg.attr('width'));
+            const height = parseInt(correctionVelocitySvg.attr('height'));
+            const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+            renderCorrectionVelocityAnimation(width, height, margin);
+
+            // Check if we've reached the asymptote (99% of target)
+            if (animationState.currentVelocity < animationState.targetVelocity * 0.99) {
+                animationState.animationFrame = requestAnimationFrame(animateVelocity);
+            } else {
+                // Reached asymptote, stop animation
+                animationState.isPlaying = false;
+                d3.select('#velocity-play-button')
+                    .text('🔄 Reset & Play')
+                    .style('background', '#88b270')
+                    .on('click', resetAndPlay);
+            }
+        }
+
+        function resetAndPlay() {
+            // Reset state
+            animationState.currentVelocity = 0;
+            animationState.isPlaying = false;
+
+            // Re-render at zero
+            const width = parseInt(correctionVelocitySvg.attr('width'));
+            const height = parseInt(correctionVelocitySvg.attr('height'));
+            const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+            renderCorrectionVelocityAnimation(width, height, margin);
+
+            // Reset button
+            d3.select('#velocity-play-button')
+                .text('▶ Play Simulation')
+                .style('background', '#88b270')
+                .on('click', toggleAnimation);
+
+            // Auto-start after a brief delay
+            setTimeout(() => {
+                toggleAnimation();
+            }, 300);
+        }
+
+        function updateCorrectionVelocity() {
+            // This function is called when the allocation slider changes
+            // We can update the target velocity based on the allocation effectiveness
+            animationState.targetVelocity = 0.5 * globalTruePercent;
+
+            if (!animationState.isPlaying && correctionVelocitySvg) {
+                const width = parseInt(correctionVelocitySvg.attr('width'));
+                const height = parseInt(correctionVelocitySvg.attr('height'));
+                const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+                renderCorrectionVelocityAnimation(width, height, margin);
+            }
+        }
+
+        // ============================================================================
+        // Initialize all visualizations when DOM is ready
+        // ============================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if containers exist before initializing
+            if (document.getElementById('true-false-viz')) {
+                createTrueFalseRecognitionViz('true-false-viz');
+            }
+            if (document.getElementById('benefit-gradient-viz')) {
+                createBenefitGradientViz('benefit-gradient-viz');
+            }
+            if (document.getElementById('correction-velocity-viz')) {
+                createCorrectionVelocityViz('correction-velocity-viz');
+            }
+        });
+    </script>
+</body>
+
+</html>
