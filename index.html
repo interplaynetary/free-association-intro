@@ -295,7 +295,8 @@
     }
 
     .section-content.expanded {
-        max-height: 5000px;
+        max-height: 50000px;
+        /* Increased from 5000px to prevent cutoff */
     }
 
     .content-inner {
@@ -805,6 +806,49 @@
             transform: rotate(90deg);
             margin: 0.5rem 0;
         }
+
+        .math-block {
+            font-size: 0.9rem;
+            padding: 0.75rem;
+            margin: 1rem -1rem;
+            /* Negative margin to gain width */
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+            width: calc(100% + 2rem);
+            max-width: calc(100% + 2rem);
+        }
+
+        .viz-container {
+            padding: 1rem 0.5rem;
+            margin: 1.5rem -1rem;
+            width: calc(100% + 2rem);
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+        }
+
+        .transformation {
+            padding: 1.25rem;
+            gap: 0.75rem;
+        }
+
+        .transformation .number {
+            width: 2.25rem;
+            height: 2.25rem;
+            font-size: 1rem;
+        }
+
+        .transformation p {
+            font-size: 1rem;
+            word-break: break-word;
+            /* Ensure text wraps */
+        }
+
+        .principle-text {
+            padding: 1.25rem;
+            font-size: 1.125rem;
+        }
     }
 </style>
 
@@ -856,16 +900,6 @@
                         </div>
                     </div>
 
-                    <h4>The Core Hypothesis</h4>
-                    <p class="hypothesis" id="prop-core-hypothesis">
-                        Voluntary proportional distribution of capacity, with continuous dynamic adjustment based on
-                        feedback, produces better outcomes than coerced allocation.
-                    </p>
-                    <p class="falsifiability">
-                        <strong>Falsifiable:</strong> If voluntary distribution produces worse outcomes, the system
-                        will
-                        fail to attract participants.
-                    </p>
                     <h4>What is "Voluntary"?</h4>
                     <p class="principle-text" id="prop-voluntary-definition">
                         <strong>Voluntary</strong> means each entity retains <em>unilateral sovereignty</em> over
@@ -901,33 +935,35 @@
                     <div class="method-steps">
                         <div class="step">
                             <span class="step-number">1</span>
-                            <h5>Hypothesis Formation</h5>
-                            <p>Entity forms hypothesis about aligned capacity allocation</p>
+                            <h5>Hypothesis</h5>
+                            <p>Predict which allocation procedures best direct capacity toward relations that contribute
+                                to goal realization</p>
                         </div>
                         <div class="step">
                             <span class="step-number">2</span>
-                            <h5>Implementation</h5>
-                            <p>Entity allocates capacity according to hypothesis</p>
+                            <h5>Experiment</h5>
+                            <p>Implement those procedures and allocate capacity accordingly</p>
                         </div>
                         <div class="step">
                             <span class="step-number">3</span>
-                            <h5>Measurement</h5>
-                            <p>Observe actual results</p>
+                            <h5>Measure</h5>
+                            <p>Observe actual outcomes, goal realization and direct/transitive relational contribution
+                            </p>
                         </div>
                         <div class="step">
                             <span class="step-number">4</span>
-                            <h5>Testing</h5>
+                            <h5>Test</h5>
                             <p>Compare predicted to actual outcomes</p>
                         </div>
                         <div class="step">
                             <span class="step-number">5</span>
-                            <h5>Adjustment</h5>
-                            <p>Update allocations and their determination procedures based on evidence</p>
+                            <h5>Update</h5>
+                            <p>Revise procedures based on evidence; retain what works, discard what fails</p>
                         </div>
                         <div class="step">
                             <span class="step-number">6</span>
-                            <h5>Sharing</h5>
-                            <p>Successful patterns spread through imitation</p>
+                            <h5>Share</h5>
+                            <p>Communicate findings; successful patterns spread through imitation</p>
                         </div>
                     </div>
                 </div>
@@ -1005,7 +1041,7 @@
 
                     <p class="principle-text" id="prop-alignment-definition">
                         Agents possess diverse and finite capacities. <strong>Alignment</strong> exists when an agent
-                        directs its capacities toward social–material relations that reliably contribute to the
+                        directs its capacities toward social–material relations that contribute to the
                         realization of the goals that organize and sustain its agency over time.
                     </p>
                     <p class="principle-text" id="prop-relational-conditions">
@@ -1886,7 +1922,8 @@
 
             const width = Math.min(600, container.node().getBoundingClientRect().width);
             const height = 250;
-            const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+            const isMobile = width < 400;
+            const margin = { top: 50, right: 15, bottom: 40, left: isMobile ? 35 : 60 };
 
             // Create play button
             const buttonContainer = container.append('div')
@@ -2068,7 +2105,8 @@
             // Re-render
             const width = parseInt(correctionVelocitySvg.attr('width'));
             const height = parseInt(correctionVelocitySvg.attr('height'));
-            const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+            const isMobile = width < 400;
+            const margin = { top: 50, right: 15, bottom: 40, left: isMobile ? 35 : 60 };
             renderCorrectionVelocityAnimation(width, height, margin);
 
             // Check if we've reached the asymptote (99% of target)
@@ -2092,7 +2130,8 @@
             // Re-render at zero
             const width = parseInt(correctionVelocitySvg.attr('width'));
             const height = parseInt(correctionVelocitySvg.attr('height'));
-            const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+            const isMobile = width < 400;
+            const margin = { top: 50, right: 15, bottom: 40, left: isMobile ? 35 : 60 };
             renderCorrectionVelocityAnimation(width, height, margin);
 
             // Reset button
@@ -2115,7 +2154,8 @@
             if (!animationState.isPlaying && correctionVelocitySvg) {
                 const width = parseInt(correctionVelocitySvg.attr('width'));
                 const height = parseInt(correctionVelocitySvg.attr('height'));
-                const margin = { top: 50, right: 20, bottom: 40, left: 60 };
+                const isMobile = width < 400;
+                const margin = { top: 50, right: 15, bottom: 40, left: isMobile ? 35 : 60 };
                 renderCorrectionVelocityAnimation(width, height, margin);
             }
         }
