@@ -29,7 +29,7 @@
             }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 </head>
 
 <style>
@@ -37,14 +37,50 @@
         font-family: 'Times New Roman', serif;
         font-size: 1.1rem;
         background: rgba(255, 255, 255, 0.4);
-        padding: 1rem;
+        padding: 0.75rem 0.5rem;
         margin: 1rem 0;
         border-radius: 4px;
         text-align: center;
         color: var(--text-dark);
         border: 1px solid rgba(136, 178, 112, 0.2);
-        overflow-x: auto;
+        /* Scale content to fit, don't scroll or crop */
+        overflow: hidden;
         max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        /* Stack latex and legend vertically */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .math-legend {
+        margin-top: 0.5rem;
+        font-style: italic;
+        font-size: 0.9em;
+        text-align: left;
+        /* Left align the definitions */
+        align-self: center;
+        /* But keep the block itself centered */
+        display: inline-block;
+        /* Allow text-align: left to work within */
+    }
+
+    /* Force SVG to scale down if needed */
+    /* Force SVG to scale down if needed, but respect inline vs block */
+    .math-block mjx-container[display="true"] {
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .math-block mjx-container[display="false"] {
+        display: inline-block;
+        margin: 0;
+    }
+
+    .math-block mjx-container svg {
+        max-width: 100%;
+        height: auto;
     }
 
     :root {
@@ -1130,23 +1166,17 @@
                         <div class="point">
                             <h5>3. Revocability</h5>
                             <p>Instant withdrawal of allocation, no lock-in</p>
-                            <div class="mini-latex" style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.8;">
-                                $$ \text{Revocability} \implies \lim_{t \to 0} \text{Cost of Correction} $$
-                            </div>
+
                         </div>
                         <div class="point">
                             <h5>4. Discovery Infrastructure</h5>
                             <p>Low-friction mechanisms to find better partners</p>
-                            <div class="mini-latex" style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.8;">
-                                $$ \uparrow \text{Discovery} \implies \uparrow P(\text{Finding True Recognition}) $$
-                            </div>
+
                         </div>
                         <div class="point">
                             <h5>5. Low Switching Costs</h5>
                             <p>Minimal transaction costs for reallocation</p>
-                            <div class="mini-latex" style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.8;">
-                                $$ \downarrow \text{Cost} \implies \uparrow \text{Alignment Velocity} $$
-                            </div>
+
                         </div>
                         <div class="point"
                             style="background: transparent; border: 1px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; flex-direction: column;">
@@ -1279,46 +1309,103 @@
         <!-- Science Section -->
         <section class="accordion-section" id="science">
             <button class="section-header" aria-expanded="false" aria-controls="science-content">
-                <h3 class="section-title">The Scientific Program</h3>
+                <h3 class="section-title">Science</h3>
                 <p class="section-subtitle">Coordination as Scientific Capacity Allocation</p>
                 <span class="expand-icon" aria-hidden="true">+</span>
             </button>
             <div class="section-content" id="science-content">
                 <div class="content-inner">
 
-                    <h4>The Scientific Method applied to Capacity Allocation</h4>
+                    <h4>Capacity Allocation Circuit</h4>
                     <div class="method-steps">
                         <div class="step">
                             <span class="step-number">1</span>
-                            <h5>Hypothesis</h5>
-                            <p>Predict which allocation procedures best direct capacity toward relations that contribute
-                                to goal realization</p>
+                            <h5>Starting Point: Subjective Recognition</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ R(t) = \text{My Current Recognition} $$
+                            </div>
+                            <p>My current (imperfect) recognition of contributions. $R(t) \in \mathbb{R}^n$ where $n$ is
+                                the dimensions of recognition developed.</p>
                         </div>
                         <div class="step">
                             <span class="step-number">2</span>
-                            <h5>Experiment</h5>
-                            <p>Implement those procedures and allocate capacity accordingly</p>
+                            <h5>Objectification: Capacity Allocation</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ A(t) = C \cdot \frac{R(t)}{\sum R(t)} $$
+                            </div>
+                            <p>My subjective recognition becomes objective allocation. (Subjective &rarr; Objective)</p>
                         </div>
                         <div class="step">
                             <span class="step-number">3</span>
-                            <h5>Measure</h5>
-                            <p>Observe actual outcomes, goal realization and direct/transitive relational contribution
-                            </p>
+                            <h5>Realization: Goal Achievement</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ O(t) = f(A(t), \text{Capacity}_{social}, \text{World}) $$
+                            </div>
+                            <p>Objective allocation produces objective outcomes. (Objective remains Objective)</p>
                         </div>
                         <div class="step">
                             <span class="step-number">4</span>
-                            <h5>Test</h5>
-                            <p>Compare predicted to actual outcomes</p>
+                            <h5>Reflection: Outcome Assessment</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ \Delta G(t) = \text{Goals}_{realized} - \text{Goals}_{expected} $$
+                            </div>
+                            <p>Objective outcomes are subjectively experienced. (Objective &rarr; Subjective)</p>
                         </div>
                         <div class="step">
                             <span class="step-number">5</span>
-                            <h5>Update</h5>
-                            <p>Revise procedures based on evidence; retain what works, discard what fails</p>
+                            <h5>Education: Subjectification</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ R(t+1) = R(t) + \text{learning}(\Delta G, A, O) $$
+                            </div>
+                            <p>Objective results educate subjective recognition. New dimensions may appear:
+                                $dim(R_{t+1}) \ge dim(R_t)$.</p>
                         </div>
                         <div class="step">
                             <span class="step-number">6</span>
-                            <h5>Share</h5>
-                            <p>Communicate findings; successful patterns spread through imitation</p>
+                            <h5>Development: Capacity Growth</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ C(t+1) = C(t) + \text{development}(\dots) $$
+                            </div>
+                            <p>The process itself develops capacity through social participation and goal realization.
+                            </p>
+                        </div>
+                    </div>
+
+                    <h5
+                        style="color: var(--accent-coral); margin-top: 3rem; text-transform: uppercase; font-family: var(--font-sans);">
+                        Convergence</h5>
+                    <p class="principle-text" style="font-size: 1.1rem; padding: 1.5rem;">
+                        As $t \to \infty$ (under the right conditions):<br>
+                        • $R(t) \to R_T$ (subjective approaches objective truth)<br>
+                        • $A(t) \to A_{optimal}$ (allocation approaches optimal)<br>
+                        • $\alpha(t) \to 1$ (alignment approaches perfect)<br>
+                        • $C(t) \to C_{full}$ (capacity approaches full development)
+                    </p>
+
+                    <div class="point" style="margin-bottom: 2.5rem; border-left: 3px solid var(--accent-coral);">
+                        <h5 style="margin-top: 0; color: var(--accent-coral);">The Right Conditions</h5>
+                        <ul style="list-style: none; padding-left: 0; line-height: 1.6;">
+                            <li>• <strong>Voluntary Allocation</strong> (Sovereignty)</li>
+                            <li>• <strong>Transparent Outcomes</strong> (Visibility)</li>
+                            <li>• <strong>Revocable Allocation</strong> (Adaptability)</li>
+                            <li>• <strong>Social Capacity</strong> (Abundance Basis)</li>
+                            <li>• <strong>Multiple Dimensions</strong> (Rich Recognition Space)</li>
+                        </ul>
+                    </div>
+
+                    <div
+                        style="background: rgba(136, 178, 112, 0.15); padding: 2rem; border-radius: 4px; border: 1px solid rgba(136, 178, 112, 0.3);">
+                        <h5
+                            style="margin-top: 0; color: var(--text-dark); text-transform: uppercase; font-family: var(--font-sans);">
+                            The Unity</h5>
+                        <p style="margin-bottom: 1.5rem;">At each moment, Subjective and Objective are distinct but
+                            unified. Each transforms into the other. The gap between them (misalignment) drives the
+                            process forward. The process itself educates, develops, and enriches.</p>
+
+                        <div class="math-block" style="background: rgba(255,255,255,0.6); margin: 0;">
+                            $$ \lim_{t \to \infty} [ \text{Subjective} \equiv \text{Objective} ] $$
+                            <div class="math-legend">Not identity, but unity (each is the realization of the other).
+                            </div>
                         </div>
                     </div>
                 </div>
