@@ -251,6 +251,50 @@
         }
     }
 
+    /* Export Button - Top Right of Hero */
+    .export-btn-fixed {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        padding: 0;
+        background: var(--bg-green);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        box-shadow: 0 4px 12px rgba(136, 178, 112, 0.4);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .export-btn-fixed:hover {
+        background: #6d9158;
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(136, 178, 112, 0.5);
+    }
+
+    .export-btn-fixed:active {
+        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(136, 178, 112, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .export-btn-fixed {
+            width: 3rem;
+            height: 3rem;
+            font-size: 1.25rem;
+            top: 1rem;
+            right: 1rem;
+        }
+    }
+
+
     /* Accordion Container */
     .accordion-container {
         width: 100%;
@@ -899,6 +943,12 @@
 <body>
     <!-- Hero Section -->
     <section class="hero">
+        <!-- Export Button (Top Right) -->
+        <button id="export-markdown-btn" class="export-btn-fixed" aria-label="Export to Markdown"
+            title="Export to Markdown">
+            📄
+        </button>
+
         <div class="hero-content">
             <img src="logo-squared.png" alt="Free Association Coalition Logo" class="hero-logo">
             <h1>Free Association</h1>
@@ -1256,12 +1306,12 @@
                         It answers: <em>"What percentage of my capacity flows proportionally to who actually helps me
                             achieve my goals?"</em>
                     </p>
-                    <ul class="principle-text">
-                        <li><strong>100% aligned</strong> → All capacity goes to the right people in the right
-                            proportions</li>
-                        <li><strong>50% aligned</strong> → Half well-directed, half misdirected</li>
-                        <li><strong>0% aligned</strong> → Completely opposite to who actually helps</li>
-                    </ul>
+                    <p style="margin: 1rem 0; line-height: 1.8;">
+                        <strong>100% aligned</strong> → All capacity goes to the right people in the right
+                        proportions<br>
+                        <strong>50% aligned</strong> → Half well-directed, half misdirected<br>
+                        <strong>0% aligned</strong> → Completely opposite to who actually helps
+                    </p>
 
                     <div class="math-block">
                         $$
@@ -2045,8 +2095,10 @@
             } else {
                 expandSection(section, header, content);
 
-                // Immediate, gentle scroll to ensure visibility
-                section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                // Wait for CSS transition to complete (400ms) before scrolling
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 450); // Slightly longer than transition duration
             }
         }
 
@@ -2752,6 +2804,266 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (document.getElementById('contributor-pie-chart')) {
                 createContributorPieChart('contributor-pie-chart');
+            }
+        });
+    </script>
+    <script>
+        // ============================================================================
+        // Export to Markdown Functionality
+        // ============================================================================
+
+        function exportToMarkdown() {
+            let markdown = '# Free Association\n\n';
+            markdown += '*Perfectly Value Aligned Capacity Distribution*\n\n';
+            markdown += '---\n\n';
+
+            // Get all accordion sections
+            const sections = document.querySelectorAll('.accordion-section');
+
+            sections.forEach(section => {
+                // Get section title and subtitle
+                const title = section.querySelector('.section-title')?.textContent.trim();
+                const subtitle = section.querySelector('.section-subtitle')?.textContent.trim();
+
+                if (title) {
+                    markdown += `## ${title}\n\n`;
+                    if (subtitle) {
+                        markdown += `*${subtitle}*\n\n`;
+                    }
+                }
+
+                // Get section content
+                const contentInner = section.querySelectorAll('.content-inner');
+
+                contentInner.forEach(content => {
+                    // Process all child elements
+                    const elements = content.children;
+
+                    for (let elem of elements) {
+                        markdown += processElement(elem);
+                    }
+                });
+
+                markdown += '\n---\n\n';
+            });
+
+            // Download the markdown file
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'free-association.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function processElement(elem) {
+            let result = '';
+            const tagName = elem.tagName.toLowerCase();
+
+            // Skip visualization containers and iframes
+            if (elem.classList.contains('viz-container') ||
+                elem.classList.contains('browser-mockup') ||
+                elem.classList.contains('visual-comparison') ||
+                tagName === 'iframe') {
+                return '';
+            }
+
+            switch (tagName) {
+                case 'h4':
+                    result += `### ${elem.textContent.trim()}\n\n`;
+                    break;
+
+                case 'h5':
+                    result += `#### ${elem.textContent.trim()}\n\n`;
+                    break;
+
+                case 'p':
+                    result += `${processInlineContent(elem)}\n\n`;
+                    break;
+
+                case 'div':
+                    // Handle math blocks - IMPROVED
+                    if (elem.classList.contains('math-block')) {
+                        // Extract LaTeX from the $$ delimiters
+                        const text = elem.textContent;
+                        const lines = text.split('\n').map(l => l.trim()).filter(l => l && l !== '$$');
+
+                        if (lines.length > 0) {
+                            result += '$$\n';
+                            lines.forEach(line => {
+                                if (line && !line.includes('Where:') && !line.includes('•')) {
+                                    result += line + '\n';
+                                }
+                            });
+                            result += '$$\n\n';
+                        }
+
+                        // Add legend if present
+                        const legend = elem.querySelector('.math-legend');
+                        if (legend) {
+                            const legendText = legend.textContent.trim();
+                            // Extract the actual legend text, excluding LaTeX
+                            const cleanLegend = legendText.split('\n')
+                                .filter(l => !l.includes('Where:') || l.includes('•'))
+                                .join('\n')
+                                .trim();
+                            if (cleanLegend) {
+                                result += `*${cleanLegend}*\n\n`;
+                            }
+                        }
+                    }
+                    // Handle key points
+                    else if (elem.classList.contains('key-points')) {
+                        const points = elem.querySelectorAll('.point');
+                        points.forEach(point => {
+                            result += processElement(point);
+                        });
+                    }
+                    // Handle individual points
+                    else if (elem.classList.contains('point')) {
+                        const heading = elem.querySelector('h5');
+                        if (heading) {
+                            result += `#### ${heading.textContent.trim()}\n\n`;
+                        }
+
+                        // Process children in order
+                        Array.from(elem.children).forEach(child => {
+                            if (child.tagName.toLowerCase() === 'h5') {
+                                // Already handled
+                            } else if (child.tagName.toLowerCase() === 'p') {
+                                result += `${processInlineContent(child)}\n\n`;
+                            } else if (child.tagName.toLowerCase() === 'ul' || child.tagName.toLowerCase() === 'ol') {
+                                result += processElement(child);
+                            } else if (child.classList && child.classList.contains('math-block')) {
+                                result += processElement(child);
+                            }
+                        });
+                    }
+                    // Handle method steps
+                    else if (elem.classList.contains('method-steps')) {
+                        const steps = elem.querySelectorAll('.step');
+                        steps.forEach(step => {
+                            result += processElement(step);
+                        });
+                    }
+                    // Handle individual steps
+                    else if (elem.classList.contains('step')) {
+                        const stepNum = elem.querySelector('.step-number')?.textContent.trim();
+                        const heading = elem.querySelector('h5');
+                        if (heading) {
+                            result += `#### ${stepNum ? stepNum + '. ' : ''}${heading.textContent.trim()}\n\n`;
+                        }
+
+                        // Process in order: math block first, then paragraphs
+                        const mathBlock = elem.querySelector('.math-block');
+                        if (mathBlock) {
+                            result += processElement(mathBlock);
+                        }
+
+                        const paragraphs = elem.querySelectorAll('p');
+                        paragraphs.forEach(p => {
+                            if (!p.closest('.math-block')) {
+                                result += `${processInlineContent(p)}\n\n`;
+                            }
+                        });
+                    }
+                    // Handle example boxes (like free-riding example)
+                    else if (elem.style.background && elem.style.background.includes('rgba(255, 107, 107')) {
+                        const heading = elem.querySelector('h5');
+                        if (heading) {
+                            result += `> **${heading.textContent.trim()}**\n>\n`;
+                        }
+                        const paragraphs = elem.querySelectorAll('p');
+                        paragraphs.forEach(p => {
+                            result += `> ${processInlineContent(p)}\n>\n`;
+                        });
+                        const codeBlocks = elem.querySelectorAll('div[style*="monospace"]');
+                        codeBlocks.forEach(code => {
+                            const lines = code.innerHTML.split('<br>');
+                            lines.forEach(line => {
+                                const cleanLine = line.replace(/<[^>]*>/g, '').trim();
+                                if (cleanLine) {
+                                    result += `> ${cleanLine}\n`;
+                                }
+                            });
+                            result += '>\n';
+                        });
+                        result += '\n';
+                    }
+                    // Handle other styled divs recursively
+                    else {
+                        const children = elem.children;
+                        for (let child of children) {
+                            result += processElement(child);
+                        }
+                    }
+                    break;
+
+                case 'ul':
+                case 'ol':
+                    const items = elem.querySelectorAll(':scope > li');
+                    items.forEach((item, index) => {
+                        const prefix = tagName === 'ul' ? '- ' : `${index + 1}. `;
+                        result += `${prefix}${processInlineContent(item)}\n`;
+                    });
+                    result += '\n';
+                    break;
+
+                default:
+                    // For other elements, try to extract text content
+                    if (elem.textContent.trim()) {
+                        const children = elem.children;
+                        if (children.length > 0) {
+                            for (let child of children) {
+                                result += processElement(child);
+                            }
+                        }
+                    }
+            }
+
+            return result;
+        }
+
+        function processInlineContent(elem) {
+            let html = elem.innerHTML;
+
+            // Preserve inline LaTeX - handle both $ and $$ delimiters
+            html = html.replace(/\$\$([^\$]+)\$\$/g, '$$$$1$$');
+            html = html.replace(/\$([^\$]+)\$/g, '$$$$1$$');
+
+            // Convert HTML tags to markdown
+            html = html.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
+            html = html.replace(/<b>(.*?)<\/b>/g, '**$1**');
+            html = html.replace(/<em>(.*?)<\/em>/g, '*$1*');
+            html = html.replace(/<i>(.*?)<\/i>/g, '*$1*');
+            html = html.replace(/<br\s*\/?>/g, ' ');
+            html = html.replace(/<code>(.*?)<\/code>/g, '`$1`');
+
+            // Remove anchor links (§)
+            html = html.replace(/<a[^>]*class="prop-anchor"[^>]*>.*?<\/a>/g, '');
+
+            // Remove remaining HTML tags
+            html = html.replace(/<[^>]*>/g, '');
+
+            // Decode HTML entities
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = html;
+            html = textarea.value;
+
+            // Clean up extra whitespace
+            html = html.replace(/\s+/g, ' ').trim();
+
+            return html;
+        }
+
+        // Add event listener to export button
+        document.addEventListener('DOMContentLoaded', () => {
+            const exportBtn = document.getElementById('export-markdown-btn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', exportToMarkdown);
             }
         });
     </script>
