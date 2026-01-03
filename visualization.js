@@ -236,6 +236,50 @@ function createGoalPriorityTree(containerId) {
         }
     });
 
+    // Add labels to nodes
+    nodes.each(function (d) {
+        const node = d3.select(this);
+        const isRoot = !d.parent;
+        const isLeaf = !d.children && d.data.contributors;
+        const isGoal = d.children;
+
+        // Node Name (Above)
+        node.append('text')
+            .attr('y', -barHeight / 2 - 8)
+            .attr('text-anchor', 'middle')
+            .style('font-family', 'var(--font-sans)')
+            .style('font-size', '14px')
+            .style('font-weight', '700')
+            .style('fill', 'var(--text-dark)')
+            .style('text-shadow', '0 2px 4px rgba(255,255,255,0.9)')
+            .text(d.data.name);
+
+        // Node Type (Below)
+        let typeLabel = "";
+        let typeColor = "var(--text-light)";
+
+        if (isRoot) {
+            typeLabel = "ROOT PRIORITY";
+            typeColor = "var(--text-dark)";
+        } else if (isGoal) {
+            typeLabel = "GOAL";
+            typeColor = "#88B270"; // Greenish
+        } else if (isLeaf) {
+            typeLabel = "CONTRIBUTION";
+            typeColor = "#E07A5F"; // Coral-ish
+        }
+
+        node.append('text')
+            .attr('y', barHeight / 2 + 14)
+            .attr('text-anchor', 'middle')
+            .style('font-family', 'var(--font-sans)')
+            .style('font-size', '10px')
+            .style('font-weight', '600')
+            .style('letter-spacing', '0.05em')
+            .style('fill', typeColor)
+            .text(typeLabel);
+    });
+
     // Add pie chart above the root node
     const pieRadius = 60;
     const pieY = -120; // Position above the root
@@ -314,7 +358,7 @@ function createGoalPriorityTree(containerId) {
         .style('font-size', '13px')
         .style('font-weight', '700')
         .style('fill', 'var(--text-dark)')
-        .text('Total Recognition');
+        .text('Recognition of Contribution to Priorities in General');
 
     // Add legend at bottom
     const legend = svg.append('g')
@@ -356,12 +400,13 @@ function createGoalPriorityTree(containerId) {
         .style('border-left', '3px solid var(--accent-coral)')
         .style('font-size', '0.95rem')
         .html(`
-            <strong>Reading the Visualization:</strong><br>
-            • Pie chart shows total recognition distribution across all contributors<br>
-            • Root shows 100% split into top-level goals<br>
-            • Each node's bar width is proportional to its weight in the parent<br>
-            • Bar segments show proportions summing to 100%<br>
-            • Colored borders indicate parent category<br>
-            • Leaf nodes show contributor shares (stacked bars)
+            <strong>Tree Anatomy:</strong><br>
+            <strong>Goals (Branches):</strong> Abstract structural nodes. They don't do work; they organize it. Their fulfillment is the weighted average of their children.<br>
+            <strong>Contributions (Leaves):</strong> When a node has a contributor, it becomes a contribution. This is where actual work is done and recognition meets capacity.<br>
+            <br>
+            <strong>Reading the Graph:</strong><br>
+            • <strong>Width</strong> = Relative Weight (Importance)<br>
+            • <strong>Pie Chart</strong> = Total Recognition Share (Aggregated from all leaves)<br>
+            • <strong>Links</strong> = Flow of priority from goal to sub-goal
         `);
 }

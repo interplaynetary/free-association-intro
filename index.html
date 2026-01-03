@@ -922,85 +922,271 @@
             <div class="section-content" id="principles">
                 <div class="content-inner">
 
-                    <h4>What is "Voluntary"?</h4>
-                    <p class="principle-text" id="prop-voluntary-definition">
-                        <strong>Voluntary</strong> means each entity retains <em>unilateral sovereignty</em> over
-                        how
-                        its finite capacity is allocated in pursuit of its own goals. No external authority can
-                        compel
-                        an entity to allocate capacity to a particular recipient, and no recipient can impose a
-                        claim on
-                        another’s capacity.
-                    </p>
+                    <h4>The Basic Elements</h4>
+                    <p class="intro">The protocol is built on five fundamental elements that describe the cycle of
+                        production and recognition.</p>
 
-                    <h4>Recognition</h4>
-                    <p class="principle-text">
-                        <strong>Recognition</strong> is the acknowledgment of contribution from an entity towards one's
-                        goals.
-                    </p>
-                    <div class="math-block">
-                        $$
-                        \text{Recognition } (R_i) \in \mathbb{R}_{\geq 0} \quad \text{(Real number line)}
-                        $$
-                        <div class="math-legend">
-                            Recognition can be any non-negative real value.
+                    <div class="key-points" style="grid-template-columns: 1fr; gap: 1rem;">
+                        <div class="point" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
+                                C</div>
+                            <div>
+                                <h5 style="margin: 0 0 0.5rem 0;">Capacity (Finite Resources)</h5>
+                                <p style="margin: 0; font-size: 1rem;">The finite power to act or produce (e.g., time,
+                                    compute, labor, funds). <br>
+                                    $C \in \mathbb{R}^+$ (Positive, finite, bounded value).</p>
+                            </div>
+                        </div>
+
+                        <div class="point" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
+                                G</div>
+                            <div>
+                                <h5 style="margin: 0 0 0.5rem 0;">Goals (Pursued Ends)</h5>
+                                <p style="margin: 0; font-size: 1rem;">The objectives or states that an entity seeks to
+                                    realize using its capacity.</p>
+                            </div>
+                        </div>
+
+                        <div class="point" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
+                                R</div>
+                            <div>
+                                <h5 style="margin: 0 0 0.5rem 0;">Recognition (Subjective Assessment)</h5>
+                                <p style="margin: 0; font-size: 1rem;">The subjective acknowledgment of how much another
+                                    entity contributes to one's goals.<br>
+                                    $R \in \mathbb{R}^n$ (Multidimensional sensing of value).</p>
+                            </div>
+                        </div>
+
+                        <div class="point" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
+                                A</div>
+                            <div>
+                                <h5 style="margin: 0 0 0.5rem 0;">Allocation (Objective Distribution)</h5>
+                                <p style="margin: 0; font-size: 1rem;">The objective flow of capacity from provider to
+                                    recipient.<br>
+                                    $A = C \cdot \frac{R}{\sum R}$ (Proportional to recognition).</p>
+                            </div>
+                        </div>
+
+                        <div class="point" style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                            <div
+                                style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
+                                O</div>
+                            <div>
+                                <h5 style="margin: 0 0 0.5rem 0;">Outcomes (Realized Results)</h5>
+                                <p style="margin: 0; font-size: 1rem;">The actual changes produced by the
+                                    allocation. These outcomes educate future recognition.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <h4>Total Recognition</h4>
-                    <p class="principle-text">
-                        <strong>Total Recognition</strong> is the sum of all recognition values assigned by a
-                        participant, normalized to 100%.
+                    <h4>The Fundamental Axiom</h4>
+                    <p class="principle-text" id="prop-distribution">
+                        <strong>Voluntary Association:</strong> Entities allocate their capacity ($A$) in proportion to
+                        their recognition ($R$) of contribution toward their goals ($G$).
                     </p>
                     <div class="math-block">
                         $$
-                        \text{Total Recognition } (TR) := \sum_{i} R_i = 100\%
+                        A_i \propto \frac{R_i}{\sum R}
                         $$
                         <div class="math-legend">
-                            This normalization forces prioritization and trade-offs.
+                            Allocation follows Recognition.
                         </div>
                     </div>
 
-                    <h4>Recognition-Share</h4>
+                    <h4>Prioritization</h4>
                     <p class="principle-text">
-                        <strong>Recognition-Share</strong> is the proportion of total recognition allocated to an
-                        entity.
-                    </p>
-                    <div class="math-block">
-                        $$
-                        \begin{align*}
-                        \text{Recognition-Share } (RS_i) &:= \frac{R_i}{TR} \in [0, 100\%] \quad \text{(Proportion)} \\
-                        \\
-                        \text{Constraint: } & \sum_{i} RS_i = 100\%
-                        \end{align*}
-                        $$
-                        <div class="math-legend">
-                            Recognition-Share is always a proportion, making it scale-invariant.
-                        </div>
-                    </div>
-
-                    <h4>Hierarchical Priority Allocation</h4>
-                    <p class="principle-text">
-                        Goals form a tree where each level allocates 100% across sub-goals or contributors.
-                        This visualization shows how Recognition-Share flows through nested priorities.
+                        Goals form a tree where recognition flows down. Each node distributes 100% of its incoming
+                        capacity to its children based on their contribution.
                     </p>
                     <div class="viz-container" id="goal-priority-tree"></div>
 
-                    <h4>Principle of Distribution</h4>
-                    <p class="principle-text" id="prop-distribution">
-                        <strong>Capacity Allocation:</strong> Capacity is distributed proportional to Recognition-Share.
+                    <h4>Recursive Realization Logic</h4>
+                    <p class="principle-text" style="margin-bottom: 2.5rem;">
+                        The tree structure allows us to mathematically derive the realization of high-level goals from
+                        granular contributions. It separates <strong>Goals</strong> (Branch Nodes) from
+                        <strong>Contributions</strong> (Leaf Nodes).
                     </p>
-                    <div class="math-block">
-                        $$
-                        \text{Capacity Directed}_i \propto \text{Recognition-Share}_i
-                        $$
-                        <div class="math-legend">
-                            You naturally direct your finite capacity to where you recognize contribution.
+
+                    <div class="key-points" style="margin-bottom: 2.5rem;">
+                        <div class="point">
+                            <h5>1. Global Weight (Relative Importance)</h5>
+                            <p>How important is this specific node in the context of the entire tree? It is the
+                                product of its local priority (share of parent) and its parent's global importance.</p>
+                            <div class="math-block" style="margin: 1rem 0; font-size: 0.95rem;">
+                                $$ W(n) = \frac{P(n)}{\sum P(siblings)} \cdot W(parent) $$
+                            </div>
+                        </div>
+
+                        <div class="point">
+                            <h5>2. Fulfillment (Goal Realization)</h5>
+                            <p>To what extent is this goal realized? For branches, it's the weighted average of their
+                                children. For leaves (contributions), it's the direct assessment of work done.</p>
+                            <div class="math-block" style="margin: 1rem 0; font-size: 0.95rem;">
+                                $$ F(n) = \begin{cases}
+                                \text{Assessment} & \text{if Contribution} \\
+                                \frac{\sum (W(child) \cdot F(child))}{\sum W(child)} & \text{if Goal}
+                                \end{cases} $$
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="try-it-out-section" style="margin-top: 4rem; text-align: center;">
+                        <h4>Try it out!</h4>
+                        <p
+                            style="font-size: 1.1rem; color: var(--text-body); max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.6;">
+                            Drag a square up/down to increase/decrease its priority! To see more advanced features like
+                            capacity allocation create a free account!
+                        </p>
+
+                        <div class="browser-mockup"
+                            style="border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; background: white;">
+                            <!-- Browser Chrome -->
+                            <div class="browser-bar"
+                                style="background: #f5f5f5; padding: 0.75rem 1rem; display: flex; align-items: center; border-bottom: 1px solid #e0e0e0;">
+                                <div class="dots" style="display: flex; gap: 6px; margin-right: 1.5rem;">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f56;">
+                                    </div>
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e;">
+                                    </div>
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #27c93f;">
+                                    </div>
+                                </div>
+                                <div class="address-bar"
+                                    style="flex: 1; background: white; border-radius: 6px; padding: 0.4rem 0.8rem; font-size: 0.85rem; color: #666; display: flex; align-items: center; justify-content: flex-end; border: 1px solid #e0e0e0;">
+                                    <span style="font-family: monospace;">free.playnet.lol</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        style="margin-left: 0.5rem; opacity: 0.5;">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                </div>
+                            </div>
+                            <!-- Iframe Content -->
+                            <div class="browser-content" style="height: 600px; width: 100%; position: relative;">
+                                <iframe src="https://free.playnet.lol"
+                                    style="width: 100%; height: 100%; border: none;"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+
+
+        <!-- Circuits Section -->
+        <section class="accordion-section" id="circuit">
+            <button class="section-header" aria-expanded="false" aria-controls="circuits-content">
+                <h3 class="section-title">The Circuit</h3>
+                <p class="section-subtitle">Coordination as Scientific Capacity Allocation</p>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="circuit-content">
+                <div class="content-inner">
+                    <div class="method-steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <h5>Starting Point: Subjective Recognition</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ R(t) = \text{My Current Recognition} $$
+                            </div>
+                            <p>My current (imperfect) recognition of contributions. $R(t) \in \mathbb{R}^n$ where $n$ is
+                                the dimensions of recognition developed.</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <h5>Objectification: Capacity Allocation</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ A(t) = C \cdot \frac{R(t)}{\sum R(t)} $$
+                            </div>
+                            <p>My subjective recognition becomes objective allocation. (Subjective &rarr; Objective)</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <h5>Realization: Goal Achievement</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ O(t) = f(A(t), \text{Capacity}_{social}, \text{World}) $$
+                            </div>
+                            <p>Objective allocation produces objective outcomes. (Objective remains Objective)</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <h5>Reflection: Outcome Assessment</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ \Delta G(t) = \text{Goals}_{realized} - \text{Goals}_{expected} $$
+                            </div>
+                            <p>Objective outcomes are subjectively experienced. (Objective &rarr; Subjective)</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">5</span>
+                            <h5>Education: Subjectification</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ R(t+1) = R(t) + \text{learning}(\Delta G, A, O) $$
+                            </div>
+                            <p>Objective results educate subjective recognition. New dimensions may appear:
+                                $dim(R_{t+1}) \ge dim(R_t)$.</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">6</span>
+                            <h5>Development: Capacity Growth</h5>
+                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
+                                $$ C(t+1) = C(t) + \text{development}(\dots) $$
+                            </div>
+                            <p>The process itself develops capacity through social participation and goal realization.
+                            </p>
+                        </div>
+                    </div>
+
+                    <h5
+                        style="color: var(--accent-coral); margin-top: 3rem; text-transform: uppercase; font-family: var(--font-sans);">
+                        Convergence</h5>
+                    <p class="principle-text" style="font-size: 1.1rem; padding: 1.5rem;">
+                        As $t \to \infty$ (under the right conditions):<br>
+                        • $R(t) \to R_T$ (subjective approaches objective truth)<br>
+                        • $A(t) \to A_{optimal}$ (allocation approaches optimal)<br>
+                        • $\alpha(t) \to 1$ (alignment approaches perfect)<br>
+                        • $C(t) \to C_{full}$ (capacity approaches full development)
+                    </p>
+
+                    <div class="point" style="margin-bottom: 2.5rem; border-left: 3px solid var(--accent-coral);">
+                        <h5 style="margin-top: 0; color: var(--accent-coral);">The Right Conditions</h5>
+                        <ul style="list-style: none; padding-left: 0; line-height: 1.6;">
+                            <li>• <strong>Voluntary Allocation</strong> (Sovereignty)</li>
+                            <li>• <strong>Transparent Outcomes</strong> (Visibility)</li>
+                            <li>• <strong>Revocable Allocation</strong> (Adaptability)</li>
+                            <li>• <strong>Social Capacity</strong> (Abundance Basis)</li>
+                            <li>• <strong>Multiple Dimensions</strong> (Rich Recognition Space)</li>
+                        </ul>
+                    </div>
+
+                    <div
+                        style="background: rgba(136, 178, 112, 0.15); padding: 2rem; border-radius: 4px; border: 1px solid rgba(136, 178, 112, 0.3);">
+                        <h5
+                            style="margin-top: 0; color: var(--text-dark); text-transform: uppercase; font-family: var(--font-sans);">
+                            The Unity</h5>
+                        <p style="margin-bottom: 1.5rem;">At each moment, Subjective and Objective are distinct but
+                            unified. Each transforms into the other. The gap between them (misalignment) drives the
+                            process forward. The process itself educates, develops, and enriches.</p>
+
+                        <div class="math-block" style="background: rgba(255,255,255,0.6); margin: 0;">
+                            $$ \lim_{t \to \infty} [ \text{Subjective} \equiv \text{Objective} ] $$
+                            <div class="math-legend">Not identity, but unity (each is the realization of the other).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Anti-gaming Section -->
         <section class="accordion-section" id="anti-gaming">
             <button class="section-header" aria-expanded="false" aria-controls="anti-gaming-content">
@@ -1243,7 +1429,7 @@
                         </div>
                     </div>
 
-                    <h4>Why Relations Have Infinite Potential</h4>
+                    <h4>Why Proportional Relations Have Infinite Potential</h4>
                     <p class="principle-text">
                         The proportion remains constant while the absolute values scale infinitely.
                         <br><br>
@@ -1258,7 +1444,7 @@
                         relationship structure itself is scale-invariant.
                     </p>
 
-                    <h4>Realizing the Infinite Potential</h4>
+                    <h4>Realizing our Infinite Potential</h4>
                     <p>While relationships have infinite potential, that potential becomes realized through the network:
                     </p>
 
@@ -1301,113 +1487,6 @@
                             relationship contains infinite potential • Each participant actualizes more of it</span>
                     </p>
 
-                </div>
-            </div>
-        </section>
-
-
-        <!-- Science Section -->
-        <section class="accordion-section" id="science">
-            <button class="section-header" aria-expanded="false" aria-controls="science-content">
-                <h3 class="section-title">Science</h3>
-                <p class="section-subtitle">Coordination as Scientific Capacity Allocation</p>
-                <span class="expand-icon" aria-hidden="true">+</span>
-            </button>
-            <div class="section-content" id="science-content">
-                <div class="content-inner">
-
-                    <h4>Capacity Allocation Circuit</h4>
-                    <div class="method-steps">
-                        <div class="step">
-                            <span class="step-number">1</span>
-                            <h5>Starting Point: Subjective Recognition</h5>
-                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
-                                $$ R(t) = \text{My Current Recognition} $$
-                            </div>
-                            <p>My current (imperfect) recognition of contributions. $R(t) \in \mathbb{R}^n$ where $n$ is
-                                the dimensions of recognition developed.</p>
-                        </div>
-                        <div class="step">
-                            <span class="step-number">2</span>
-                            <h5>Objectification: Capacity Allocation</h5>
-                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
-                                $$ A(t) = C \cdot \frac{R(t)}{\sum R(t)} $$
-                            </div>
-                            <p>My subjective recognition becomes objective allocation. (Subjective &rarr; Objective)</p>
-                        </div>
-                        <div class="step">
-                            <span class="step-number">3</span>
-                            <h5>Realization: Goal Achievement</h5>
-                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
-                                $$ O(t) = f(A(t), \text{Capacity}_{social}, \text{World}) $$
-                            </div>
-                            <p>Objective allocation produces objective outcomes. (Objective remains Objective)</p>
-                        </div>
-                        <div class="step">
-                            <span class="step-number">4</span>
-                            <h5>Reflection: Outcome Assessment</h5>
-                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
-                                $$ \Delta G(t) = \text{Goals}_{realized} - \text{Goals}_{expected} $$
-                            </div>
-                            <p>Objective outcomes are subjectively experienced. (Objective &rarr; Subjective)</p>
-                        </div>
-                        <div class="step">
-                            <span class="step-number">5</span>
-                            <h5>Education: Subjectification</h5>
-                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
-                                $$ R(t+1) = R(t) + \text{learning}(\Delta G, A, O) $$
-                            </div>
-                            <p>Objective results educate subjective recognition. New dimensions may appear:
-                                $dim(R_{t+1}) \ge dim(R_t)$.</p>
-                        </div>
-                        <div class="step">
-                            <span class="step-number">6</span>
-                            <h5>Development: Capacity Growth</h5>
-                            <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
-                                $$ C(t+1) = C(t) + \text{development}(\dots) $$
-                            </div>
-                            <p>The process itself develops capacity through social participation and goal realization.
-                            </p>
-                        </div>
-                    </div>
-
-                    <h5
-                        style="color: var(--accent-coral); margin-top: 3rem; text-transform: uppercase; font-family: var(--font-sans);">
-                        Convergence</h5>
-                    <p class="principle-text" style="font-size: 1.1rem; padding: 1.5rem;">
-                        As $t \to \infty$ (under the right conditions):<br>
-                        • $R(t) \to R_T$ (subjective approaches objective truth)<br>
-                        • $A(t) \to A_{optimal}$ (allocation approaches optimal)<br>
-                        • $\alpha(t) \to 1$ (alignment approaches perfect)<br>
-                        • $C(t) \to C_{full}$ (capacity approaches full development)
-                    </p>
-
-                    <div class="point" style="margin-bottom: 2.5rem; border-left: 3px solid var(--accent-coral);">
-                        <h5 style="margin-top: 0; color: var(--accent-coral);">The Right Conditions</h5>
-                        <ul style="list-style: none; padding-left: 0; line-height: 1.6;">
-                            <li>• <strong>Voluntary Allocation</strong> (Sovereignty)</li>
-                            <li>• <strong>Transparent Outcomes</strong> (Visibility)</li>
-                            <li>• <strong>Revocable Allocation</strong> (Adaptability)</li>
-                            <li>• <strong>Social Capacity</strong> (Abundance Basis)</li>
-                            <li>• <strong>Multiple Dimensions</strong> (Rich Recognition Space)</li>
-                        </ul>
-                    </div>
-
-                    <div
-                        style="background: rgba(136, 178, 112, 0.15); padding: 2rem; border-radius: 4px; border: 1px solid rgba(136, 178, 112, 0.3);">
-                        <h5
-                            style="margin-top: 0; color: var(--text-dark); text-transform: uppercase; font-family: var(--font-sans);">
-                            The Unity</h5>
-                        <p style="margin-bottom: 1.5rem;">At each moment, Subjective and Objective are distinct but
-                            unified. Each transforms into the other. The gap between them (misalignment) drives the
-                            process forward. The process itself educates, develops, and enriches.</p>
-
-                        <div class="math-block" style="background: rgba(255,255,255,0.6); margin: 0;">
-                            $$ \lim_{t \to \infty} [ \text{Subjective} \equiv \text{Objective} ] $$
-                            <div class="math-legend">Not identity, but unity (each is the realization of the other).
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
