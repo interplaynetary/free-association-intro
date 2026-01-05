@@ -26,6 +26,23 @@
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                scale: 1,
+                minScale: 0.5,
+                mtextInheritFont: true,
+                merrorInheritFont: true,
+                mathmlSpacing: false,
+                skipAttributes: {},
+                exFactor: 0.5,
+                displayAlign: 'center',
+                displayIndent: '0'
+            },
+            chtml: {
+                scale: 1,
+                minScale: 0.5,
+                matchFontHeight: true,
+                mtextInheritFont: true
             }
         };
     </script>
@@ -35,7 +52,7 @@
 <style>
     .math-block {
         font-family: 'Times New Roman', serif;
-        font-size: 1.1rem;
+        font-size: clamp(0.85rem, 2.5vw, 1.1rem);
         background: rgba(255, 255, 255, 0.4);
         padding: 0.75rem 0.5rem;
         margin: 1rem 0;
@@ -43,14 +60,14 @@
         text-align: center;
         color: var(--text-dark);
         border: 1px solid rgba(136, 178, 112, 0.2);
-        /* Scale content to fit, don't scroll or crop */
-        overflow: hidden;
+        /* Container for scaling */
+        overflow: visible;
         max-width: 100%;
+        width: 100%;
         display: flex;
         flex-direction: column;
-        /* Stack latex and legend vertically */
-        justify-content: center;
         align-items: center;
+        justify-content: center;
     }
 
     .math-legend {
@@ -58,29 +75,36 @@
         font-style: italic;
         font-size: 0.9em;
         text-align: left;
-        /* Left align the definitions */
-        align-self: center;
-        /* But keep the block itself centered */
-        display: inline-block;
-        /* Allow text-align: left to work within */
+        padding: 0 0.5rem;
+        max-width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
-    /* Force SVG to scale down if needed */
-    /* Force SVG to scale down if needed, but respect inline vs block */
+    /* Force MathJax containers to scale */
+    .math-block mjx-container {
+        display: inline-block !important;
+        max-width: 100% !important;
+        width: fit-content !important;
+    }
+
     .math-block mjx-container[display="true"] {
-        max-width: 100%;
-        display: block;
+        display: block !important;
         margin: 0 auto;
     }
 
-    .math-block mjx-container[display="false"] {
-        display: inline-block;
-        margin: 0;
+    /* Force SVG to scale down - this is the key */
+    .math-block mjx-container svg {
+        max-width: 100% !important;
+        width: auto !important;
+        height: auto !important;
     }
 
-    .math-block mjx-container svg {
-        max-width: 100%;
-        height: auto;
+    /* Additional constraint on mobile */
+    @media (max-width: 768px) {
+        .math-block mjx-container {
+            font-size: 0.85em;
+        }
     }
 
     :root {
@@ -957,6 +981,56 @@
         <a href="#foundation" class="scroll-indicator" aria-label="Scroll to content">
             <span class="scroll-arrow"></span>
         </a>
+    </section>
+
+    <!-- Intro Section -->
+    <section class="intro-section"
+        style="background: linear-gradient(180deg, var(--bg-green) 0%, var(--bg-cream) 100%); padding: 5rem 2rem 4rem; border-bottom: 1px solid rgba(38, 51, 8, 0.15);">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <p
+                style="font-family: var(--font-serif); font-size: clamp(1.25rem, 3vw, 1.5rem); line-height: 1.9; color: var(--text-dark); text-align: center; margin-bottom: 2.5rem; font-weight: 500;">
+                What if coordination didn't require <em
+                    style="color: var(--accent-coral); font-weight: 600;">coercion</em>? What if the organization of
+                human activity could emerge spontaneously from free and equal association - from each person voluntarily
+                directing their capacity toward what they recognize as valuable?
+            </p>
+
+            <p
+                style="font-family: var(--font-serif); font-size: clamp(1.0625rem, 2.5vw, 1.1875rem); line-height: 1.85; color: var(--text-body); text-align: center; margin-bottom: 2rem;">
+                This protocol offers a mathematical framework for precisely that: a system where <strong>allocation
+                    follows recognition</strong>, where relationships scale infinitely through proportion rather than
+                absolute quantity, and where gaming and free-riding self-destruct through the built-in consequences of
+                misaligned capacity.
+            </p>
+
+            <div
+                style="max-width: 750px; margin: 2.5rem auto; padding: 2rem 2.5rem; background: rgba(255, 255, 255, 0.6); border-left: 4px solid var(--accent-coral); border-radius: 2px;">
+                <p
+                    style="font-family: var(--font-serif); font-size: 1.0625rem; line-height: 1.8; color: var(--text-dark); margin: 0 0 1rem 0; text-align: left;">
+                    The key is <strong>proportional allocation under bounded constraints</strong>. When you have finite
+                    capacity and allocate it proportionally to your recognition of contribution, false recognition
+                    directly harms you - it displaces capacity from actual helpers to non-helpers, degrading your
+                    outcomes. You notice. You correct. The free-rider loses allocation. No external enforcement needed;
+                    misalignment carries its own penalty.
+                </p>
+                <p
+                    style="font-family: var(--font-serif); font-size: 1.0625rem; line-height: 1.8; color: var(--text-dark); margin: 0; text-align: left;">
+                    Meanwhile, the proportional structure itself is <strong
+                        style="color: var(--accent-coral);">scale-invariant</strong>: a 30% recognition relationship
+                    works identically whether your capacity is 10 or 10 billion, making relationships inherently
+                    abundant rather than scarce.
+                </p>
+            </div>
+
+            <p
+                style="font-family: var(--font-serif); font-size: 1.0625rem; line-height: 1.8; color: var(--text-body); text-align: center; margin-bottom: 0; opacity: 0.95;">
+                This is coordination as <em>discovery</em> rather than control - a system that doesn't prescribe how to
+                measure contribution but makes accurate measurement the competitive advantage. As subjective recognition
+                meets objective outcomes in transparent feedback loops, entities learn what actually helps them achieve
+                their goals. The framework converges toward alignment not through imposed rules but through the
+                <strong>voluntary pursuit of effectiveness</strong>.
+            </p>
+        </div>
     </section>
 
     <!-- Expandable Sections -->
@@ -1905,7 +1979,7 @@
                         by force,
                         but coordinated through the free alignment of capacity. By making the social direction of
                         production legible,
-                        voluntary, and scientifically adjustable, we do not just 'fix' organizations — we unleash
+                        voluntary, and scientifically adjustable, we do not just 'fix' organizations - we unleash
                         the
                         collective
                         intelligence of the species. This is the transition from the administration of scarcity to
