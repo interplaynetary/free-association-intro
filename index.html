@@ -47,922 +47,922 @@
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
-</head>
 
-<style>
-    .math-block {
-        font-family: 'Times New Roman', serif;
-        font-size: clamp(0.85rem, 2.5vw, 1.1rem);
-        background: rgba(255, 255, 255, 0.4);
-        padding: 0.75rem 0.5rem;
-        margin: 1rem 0;
-        border-radius: 4px;
-        text-align: center;
-        color: var(--text-dark);
-        border: 1px solid rgba(136, 178, 112, 0.2);
-        /* Container for scaling */
-        overflow: visible;
-        max-width: 100%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .math-legend {
-        margin-top: 0.5rem;
-        font-style: italic;
-        font-size: 0.9em;
-        text-align: left;
-        padding: 0 0.5rem;
-        max-width: 100%;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-    /* Force MathJax containers to scale */
-    .math-block mjx-container {
-        display: inline-block !important;
-        max-width: 100% !important;
-        width: fit-content !important;
-    }
-
-    .math-block mjx-container[display="true"] {
-        display: block !important;
-        margin: 0 auto;
-    }
-
-    /* Force SVG to scale down - this is the key */
-    .math-block mjx-container svg {
-        max-width: 100% !important;
-        width: auto !important;
-        height: auto !important;
-    }
-
-    /* Additional constraint on mobile */
-    @media (max-width: 768px) {
-        .math-block mjx-container {
-            font-size: 0.85em;
-        }
-    }
-
-    :root {
-        /* Monetarycommons-inspired color palette */
-        --bg-cream: #f4eed8;
-        --bg-green: #88b270;
-        --accent-coral: #d97757;
-        --text-dark: #263308;
-        --text-body: #3a4a1a;
-
-        /* Typography */
-        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        --font-serif: 'Lora', 'EB Garamond', Georgia, serif;
-        --font-display: 'Space Grotesk', sans-serif;
-
-        /* Transitions */
-        --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    html {
-        scroll-behavior: smooth;
-        font-size: 16px;
-    }
-
-    body {
-        font-family: var(--font-serif);
-        background: var(--bg-cream);
-        color: var(--text-body);
-        line-height: 1.7;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        position: relative;
-    }
-
-    /* Grain texture overlay */
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
-        opacity: 0.15;
-        pointer-events: none;
-        z-index: 9999;
-        mix-blend-mode: soft-light;
-    }
-
-    /* Atmospheric vignette */
-    body::after {
-        content: '';
-        position: fixed;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(38, 51, 8, 0.15) 100%);
-        pointer-events: none;
-        z-index: 9998;
-    }
-
-    /* Hero Section */
-    .hero {
-        min-height: 100vh;
-        background: var(--bg-green);
-        /* Changed from var(--green-hero) to var(--bg-green) for consistency */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 4rem 2rem;
-        position: relative;
-    }
-
-    .hero-content {
-        max-width: 800px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-    }
-
-    .hero-logo {
-        width: 180px;
-        height: 180px;
-        object-fit: contain;
-        margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-        font-family: 'Space Grotesk', var(--font-display);
-        font-size: clamp(3rem, 7vw, 5rem);
-        font-weight: 700;
-        color: #ffffff;
-        margin: 0;
-        letter-spacing: 0.02em;
-        text-transform: none;
-        text-shadow: 0 2px 4px rgba(38, 51, 8, 0.1);
-    }
-
-    .hero-subtitle {
-        font-family: var(--font-sans);
-        font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-        font-weight: 500;
-        color: #ffffff;
-        opacity: 0.95;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        margin: 0;
-        text-shadow: 0 1px 2px rgba(38, 51, 8, 0.1);
-    }
-
-    /* Scroll Indicator */
-    .scroll-indicator {
-        position: absolute;
-        bottom: 3rem;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        color: #ffffff;
-        opacity: 0.8;
-        transition: opacity 0.3s ease;
-        cursor: pointer;
-    }
-
-    .scroll-indicator:hover {
-        opacity: 1;
-    }
-
-    .scroll-arrow {
-        width: 24px;
-        height: 24px;
-        border-right: 2px solid #ffffff;
-        border-bottom: 2px solid #ffffff;
-        transform: rotate(45deg);
-        animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-
-        0%,
-        20%,
-        50%,
-        80%,
-        100% {
-            transform: rotate(45deg) translateY(0);
-        }
-
-        40% {
-            transform: rotate(45deg) translateY(8px);
-        }
-
-        60% {
-            transform: rotate(45deg) translateY(4px);
-        }
-    }
-
-    /* Export Button - Top Right of Hero */
-    .export-btn-fixed {
-        position: absolute;
-        top: 1.5rem;
-        right: 1.5rem;
-        width: 3.5rem;
-        height: 3.5rem;
-        padding: 0;
-        background: var(--bg-green);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: all var(--transition-fast);
-        box-shadow: 0 4px 12px rgba(136, 178, 112, 0.4);
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .export-btn-fixed:hover {
-        background: #6d9158;
-        transform: scale(1.1);
-        box-shadow: 0 6px 16px rgba(136, 178, 112, 0.5);
-    }
-
-    .export-btn-fixed:active {
-        transform: scale(1.05);
-        box-shadow: 0 2px 8px rgba(136, 178, 112, 0.3);
-    }
-
-    @media (max-width: 768px) {
-        .export-btn-fixed {
-            width: 3rem;
-            height: 3rem;
-            font-size: 1.25rem;
-            top: 1rem;
-            right: 1rem;
-        }
-    }
-
-
-    /* Accordion Container */
-    .accordion-container {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background: var(--bg-cream);
-    }
-
-    /* Accordion Section */
-    .accordion-section {
-        border-bottom: 1px solid rgba(38, 51, 8, 0.15);
-    }
-
-    .section-header {
-        width: 100%;
-        background: transparent;
-        border: none;
-        padding: 3rem 2rem;
-        text-align: left;
-        cursor: pointer;
-        position: relative;
-        transition: all var(--transition-fast);
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .section-header:hover {
-        background: rgba(136, 178, 112, 0.08);
-    }
-
-    .section-header:focus {
-        outline: 2px solid var(--accent-coral);
-        outline-offset: -2px;
-    }
-
-    .section-title {
-        font-family: var(--font-sans);
-        font-size: clamp(1.75rem, 4vw, 3.5rem);
-        font-weight: 900;
-        line-height: 1.1;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: var(--text-dark);
-        margin: 0;
-        padding-right: 4rem;
-        transition: color var(--transition-fast);
-    }
-
-    .section-header[aria-expanded="true"] .section-title {
-        color: var(--accent-coral);
-    }
-
-    .section-subtitle {
-        font-family: var(--font-serif);
-        font-size: clamp(1rem, 2vw, 1.125rem);
-        color: var(--text-body);
-        font-weight: 400;
-        margin: 0;
-        font-style: italic;
-    }
-
-    .expand-icon {
-        position: absolute;
-        right: 2rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 3.5rem;
-        font-weight: 300;
-        color: var(--text-dark);
-        transition: all var(--transition-medium);
-        line-height: 1;
-    }
-
-    .section-header[aria-expanded="true"] .expand-icon {
-        transform: translateY(-50%) rotate(45deg);
-        color: var(--accent-coral);
-    }
-
-    /* Section Content */
-    .section-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height var(--transition-medium);
-        background: transparent;
-    }
-
-    .section-content.expanded {
-        max-height: 50000px;
-        /* Increased from 5000px to prevent cutoff */
-    }
-
-    .content-inner {
-        padding: 2rem 2rem 4rem;
-        max-width: 900px;
-        margin: 0 auto;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-    .content-inner h4 {
-        font-family: var(--font-sans);
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin: 2.5rem 0 1rem;
-        color: var(--accent-coral);
-        letter-spacing: 0.02em;
-        text-transform: uppercase;
-    }
-
-    .content-inner h4:first-child {
-        margin-top: 0;
-    }
-
-    .content-inner h5 {
-        font-family: var(--font-sans);
-        font-size: 1.125rem;
-        font-weight: 700;
-        margin: 1.5rem 0 0.75rem;
-        color: var(--text-dark);
-        letter-spacing: 0.01em;
-    }
-
-    .content-inner p {
-        font-family: var(--font-serif);
-        font-size: 1.125rem;
-        line-height: 1.8;
-        color: var(--text-body);
-        margin-bottom: 1.25rem;
-    }
-
-    .principle-text {
-        font-family: var(--font-serif);
-        font-size: 1.375rem;
-        line-height: 1.8;
-        color: var(--text-dark);
-        margin-bottom: 2rem;
-        padding: 2rem;
-        background: rgba(136, 178, 112, 0.12);
-        border-left: 4px solid var(--bg-green);
-        border-radius: 0;
-    }
-
-    .principle-text em {
-        color: var(--accent-coral);
-        font-style: italic;
-        font-weight: 600;
-    }
-
-    /* Key Points */
-    .key-points {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin: 2.5rem 0;
-    }
-
-    .point {
-        padding: 1.75rem;
-        background: rgba(136, 178, 112, 0.08);
-        border-radius: 0;
-        border-left: 3px solid var(--accent-coral);
-    }
-
-    .point h5 {
-        color: var(--accent-coral);
-        margin-top: 0;
-    }
-
-    .point p {
-        font-size: 1.0625rem;
-    }
-
-    /* Services List */
-    .services-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-        margin: 2.5rem 0;
-    }
-
-    .service {
-        padding: 1.75rem;
-        background: rgba(136, 178, 112, 0.08);
-        border-radius: 0;
-        border-left: 3px solid var(--bg-green);
-    }
-
-    .service-icon {
-        font-size: 2.5rem;
-        display: block;
-        margin-bottom: 1rem;
-    }
-
-    .service h5 {
-        margin-top: 0;
-        color: var(--accent-coral);
-    }
-
-    .service p {
-        font-size: 1.0625rem;
-    }
-
-    /* Transformations List */
-    .transformations-list {
-        margin: 2.5rem 0;
-    }
-
-    .transformation {
-        padding: 1.75rem;
-        margin-bottom: 1.25rem;
-        background: rgba(136, 178, 112, 0.08);
-        border-radius: 0;
-        border-left: 4px solid var(--accent-coral);
-        display: flex;
-        gap: 1.25rem;
-        align-items: flex-start;
-    }
-
-    .transformation .number {
-        flex-shrink: 0;
-        width: 2.75rem;
-        height: 2.75rem;
-        background: var(--accent-coral);
-        color: var(--bg-cream);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        font-family: var(--font-sans);
-        font-size: 1.125rem;
-    }
-
-    .transformation h5 {
-        margin-top: 0;
-    }
-
-    .transformation p {
-        font-size: 1.0625rem;
-    }
-
-    /* Phases */
-    .phases {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-        margin: 2.5rem 0;
-    }
-
-    .phase {
-        padding: 1.75rem;
-        background: rgba(136, 178, 112, 0.08);
-        border-radius: 0;
-        border-left: 3px solid var(--bg-green);
-    }
-
-    .phase h5 {
-        margin-top: 0;
-        color: var(--accent-coral);
-    }
-
-    .phase p {
-        font-size: 1.0625rem;
-    }
-
-    /* Hypothesis */
-    .hypothesis {
-        font-family: var(--font-serif);
-        font-size: 1.375rem;
-        line-height: 1.8;
-        padding: 2rem;
-        background: rgba(136, 178, 112, 0.12);
-        border-left: 4px solid var(--bg-green);
-        border-radius: 0;
-        margin-bottom: 1.5rem;
-    }
-
-    .falsifiability {
-        padding: 1.5rem 2rem;
-        background: rgba(217, 119, 87, 0.12);
-        border-left: 4px solid var(--accent-coral);
-        border-radius: 0;
-        margin-bottom: 2.5rem;
-        font-size: 1.0625rem;
-    }
-
-    /* Method Steps */
-    .method-steps {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin: 2.5rem 0;
-    }
-
-    .step {
-        padding: 1.75rem;
-        background: rgba(136, 178, 112, 0.08);
-        border-radius: 0;
-        border-left: 3px solid var(--bg-green);
-    }
-
-    .step-number {
-        display: inline-block;
-        width: 2.75rem;
-        height: 2.75rem;
-        background: var(--accent-coral);
-        color: var(--bg-cream);
-        border-radius: 50%;
-        text-align: center;
-        line-height: 2.75rem;
-        font-weight: 900;
-        font-family: var(--font-sans);
-        margin-bottom: 1rem;
-        font-size: 1.125rem;
-    }
-
-    .step h5 {
-        margin-top: 0;
-    }
-
-    .step p {
-        font-size: 1.0625rem;
-    }
-
-    /* Join Options */
-    .intro {
-        font-family: var(--font-serif);
-        font-size: 1.25rem;
-        text-align: center;
-        margin-bottom: 2.5rem;
-        color: var(--text-body);
-        line-height: 1.8;
-    }
-
-    .join-options {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-        margin: 2.5rem 0;
-    }
-
-    .option {
-        padding: 2rem;
-        background: rgba(136, 178, 112, 0.08);
-        border-radius: 0;
-        border-left: 3px solid var(--accent-coral);
-        text-align: center;
-    }
-
-    .option-icon {
-        font-size: 3rem;
-        display: block;
-        margin-bottom: 1.25rem;
-    }
-
-    .option h5 {
-        margin-top: 0;
-        color: var(--accent-coral);
-    }
-
-    .option p {
-        font-size: 1.0625rem;
-    }
-
-    /* Path Steps */
-    .path-steps {
-        list-style: none;
-        counter-reset: step-counter;
-        margin: 2.5rem 0;
-        padding: 0;
-    }
-
-    .path-steps li {
-        counter-increment: step-counter;
-        padding: 1.25rem 1.25rem 1.25rem 4rem;
-        margin-bottom: 0.75rem;
-        background: rgba(136, 178, 112, 0.08);
-        border-radius: 0;
-        position: relative;
-        color: var(--text-body);
-        font-size: 1.0625rem;
-        line-height: 1.7;
-    }
-
-    .path-steps li::before {
-        content: counter(step-counter);
-        position: absolute;
-        left: 1.25rem;
-        width: 2.25rem;
-        height: 2.25rem;
-        background: var(--accent-coral);
-        color: var(--bg-cream);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        font-size: 1rem;
-        font-family: var(--font-sans);
-    }
-
-    /* Vision */
-    .vision {
-        margin-top: 3.5rem;
-        padding: 2.5rem;
-        background: rgba(136, 178, 112, 0.12);
-        border-radius: 0;
-        border-left: 4px solid var(--bg-green);
-    }
-
-    .vision h4 {
-        margin-top: 0;
-    }
-
-    .vision p {
-        font-size: 1.125rem;
-    }
-
-    .tagline {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--accent-coral);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .section-header {
-            padding: 2rem 1.5rem;
-        }
-
-        .section-title {
-            padding-right: 3rem;
-        }
-
-        .expand-icon {
-            right: 1.5rem;
-            font-size: 3rem;
-        }
-
-        .content-inner {
-            padding: 1.5rem 1.5rem 3rem;
-        }
-
-        .hero {
-            padding: 2rem 1.5rem;
-        }
-    }
-
-    /* Smooth Scroll */
-    @media (prefers-reduced-motion: no-preference) {
-        html {
-            scroll-behavior: smooth;
-        }
-    }
-
-    /* D3 Visualization Containers */
-    .viz-container {
-        margin: 2.5rem 0;
-        padding: 2rem;
-        background: rgba(136, 178, 112, 0.05);
-        border-radius: 4px;
-        border: 1px solid rgba(136, 178, 112, 0.2);
-    }
-
-    .viz-container svg {
-        display: block;
-        margin: 0 auto;
-    }
-
-    /* Math Legend */
-    .math-legend {
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
-        color: var(--text-light);
-        border-top: 1px solid rgba(136, 178, 112, 0.2);
-        padding-top: 0.5rem;
-    }
-
-    /* Proposition Anchors */
-    .prop-anchor {
-        position: absolute;
-        left: -1.5rem;
-        top: 2rem;
-        /* Aligns with principle-text padding */
-        font-family: var(--font-serif);
-        font-size: 1.25rem;
-        color: var(--accent-coral);
-        opacity: 0;
-        cursor: pointer;
-        text-decoration: none;
-        transition: opacity 0.2s ease, transform 0.2s ease;
-        user-select: none;
-    }
-
-    .principle-text {
-        position: relative;
-        /* Context for absolute anchor */
-    }
-
-    .principle-text:hover .prop-anchor,
-    .hypothesis:hover .prop-anchor,
-    .falsifiability:hover .prop-anchor,
-    .vision:hover .prop-anchor {
-        opacity: 0.6;
-    }
-
-    .prop-anchor:hover {
-        opacity: 1 !important;
-        transform: scale(1.1);
-    }
-
-    /* Toast Notification */
-    .toast {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        background: var(--text-dark);
-        color: var(--bg-cream);
-        padding: 0.75rem 1.5rem;
-        border-radius: 4px;
-        font-family: var(--font-sans);
-        font-size: 0.875rem;
-        font-weight: 500;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        opacity: 0;
-        transform: translateY(1rem);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 10000;
-        pointer-events: none;
-    }
-
-    .toast.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* Example Box and Visuals */
-    .example-box {
-        background-color: #fff9c4;
-        padding: 1.5rem;
-        border-left: 5px solid #fbc02d;
-        margin: 2rem 0;
-        border-radius: 4px;
-        color: #333;
-        font-family: var(--font-serif);
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-
-    .visual-comparison {
-        display: flex;
-        gap: 2rem;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-    }
-
-    .visual-item {
-        flex: 1;
-        min-width: 300px;
-        text-align: center;
-    }
-
-    .visual-item img {
-        width: 100%;
-        height: auto;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .visual-caption {
-        background: rgba(255, 255, 255, 0.5);
-        padding: 1rem;
-        border-radius: 4px;
-        font-family: 'Times New Roman', serif;
-    }
-
-    .visual-arrow {
-        font-size: 3rem;
-        color: var(--accent-coral);
-        font-weight: 300;
-        transition: transform 0.3s ease;
-        line-height: 1;
-        padding: 0 1rem;
-    }
-
-    @media (max-width: 768px) {
-        .visual-comparison {
+    <style>
+        .math-block {
+            font-family: 'Times New Roman', serif;
+            font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+            background: rgba(255, 255, 255, 0.4);
+            padding: 0.75rem 0.5rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            text-align: center;
+            color: var(--text-dark);
+            border: 1px solid rgba(136, 178, 112, 0.2);
+            /* Container for scaling */
+            overflow: visible;
+            max-width: 100%;
+            width: 100%;
+            display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
-        .visual-arrow {
-            transform: rotate(90deg);
-            margin: 0.5rem 0;
+        .math-legend {
+            margin-top: 0.5rem;
+            font-style: italic;
+            font-size: 0.9em;
+            text-align: left;
+            padding: 0 0.5rem;
+            max-width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
-        .math-block {
-            font-size: 0.9rem;
-            padding: 0.75rem;
-            margin: 1rem -1rem;
-            /* Negative margin to gain width */
-            border-left: none;
-            border-right: none;
-            border-radius: 0;
-            width: calc(100% + 2rem);
-            max-width: calc(100% + 2rem);
+        /* Force MathJax containers to scale */
+        .math-block mjx-container {
+            display: inline-block !important;
+            max-width: 100% !important;
+            width: fit-content !important;
         }
 
-        .viz-container {
-            padding: 1rem 0.5rem;
-            margin: 1.5rem -1rem;
-            width: calc(100% + 2rem);
-            border-left: none;
-            border-right: none;
-            border-radius: 0;
+        .math-block mjx-container[display="true"] {
+            display: block !important;
+            margin: 0 auto;
         }
 
-        .transformation {
-            padding: 1.25rem;
+        /* Force SVG to scale down - this is the key */
+        .math-block mjx-container svg {
+            max-width: 100% !important;
+            width: auto !important;
+            height: auto !important;
+        }
+
+        /* Additional constraint on mobile */
+        @media (max-width: 768px) {
+            .math-block mjx-container {
+                font-size: 0.85em;
+            }
+        }
+
+        :root {
+            /* Monetarycommons-inspired color palette */
+            --bg-cream: #f4eed8;
+            --bg-green: #88b270;
+            --accent-coral: #d97757;
+            --text-dark: #263308;
+            --text-body: #3a4a1a;
+
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-serif: 'Lora', 'EB Garamond', Georgia, serif;
+            --font-display: 'Space Grotesk', sans-serif;
+
+            /* Transitions */
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            background: var(--bg-cream);
+            color: var(--text-body);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+
+        /* Grain texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: soft-light;
+        }
+
+        /* Atmospheric vignette */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(38, 51, 8, 0.15) 100%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: var(--bg-green);
+            /* Changed from var(--green-hero) to var(--bg-green) for consistency */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .hero-logo {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', var(--font-display);
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: 0.02em;
+            text-transform: none;
+            text-shadow: 0 2px 4px rgba(38, 51, 8, 0.1);
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-sans);
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            font-weight: 500;
+            color: #ffffff;
+            opacity: 0.95;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 0 1px 2px rgba(38, 51, 8, 0.1);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .scroll-indicator:hover {
+            opacity: 1;
+        }
+
+        .scroll-arrow {
+            width: 24px;
+            height: 24px;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: rotate(45deg) translateY(0);
+            }
+
+            40% {
+                transform: rotate(45deg) translateY(8px);
+            }
+
+            60% {
+                transform: rotate(45deg) translateY(4px);
+            }
+        }
+
+        /* Export Button - Top Right of Hero */
+        .export-btn-fixed {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            padding: 0;
+            background: var(--bg-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            box-shadow: 0 4px 12px rgba(136, 178, 112, 0.4);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .export-btn-fixed:hover {
+            background: #6d9158;
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(136, 178, 112, 0.5);
+        }
+
+        .export-btn-fixed:active {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(136, 178, 112, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .export-btn-fixed {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.25rem;
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+
+
+        /* Accordion Container */
+        .accordion-container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-cream);
+        }
+
+        /* Accordion Section */
+        .accordion-section {
+            border-bottom: 1px solid rgba(38, 51, 8, 0.15);
+        }
+
+        .section-header {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 3rem 2rem;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--transition-fast);
+            display: flex;
+            flex-direction: column;
             gap: 0.75rem;
         }
 
-        .transformation .number {
-            width: 2.25rem;
-            height: 2.25rem;
-            font-size: 1rem;
+        .section-header:hover {
+            background: rgba(136, 178, 112, 0.08);
         }
 
-        .transformation p {
-            font-size: 1rem;
-            word-break: break-word;
-            /* Ensure text wraps */
+        .section-header:focus {
+            outline: 2px solid var(--accent-coral);
+            outline-offset: -2px;
+        }
+
+        .section-title {
+            font-family: var(--font-sans);
+            font-size: clamp(1.75rem, 4vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            margin: 0;
+            padding-right: 4rem;
+            transition: color var(--transition-fast);
+        }
+
+        .section-header[aria-expanded="true"] .section-title {
+            color: var(--accent-coral);
+        }
+
+        .section-subtitle {
+            font-family: var(--font-serif);
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            color: var(--text-body);
+            font-weight: 400;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .expand-icon {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            transition: all var(--transition-medium);
+            line-height: 1;
+        }
+
+        .section-header[aria-expanded="true"] .expand-icon {
+            transform: translateY(-50%) rotate(45deg);
+            color: var(--accent-coral);
+        }
+
+        /* Section Content */
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-medium);
+            background: transparent;
+        }
+
+        .section-content.expanded {
+            max-height: 50000px;
+            /* Increased from 5000px to prevent cutoff */
+        }
+
+        .content-inner {
+            padding: 2rem 2rem 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .content-inner h3 {
+            font-family: var(--font-sans);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            color: var(--accent-coral);
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .content-inner h3:first-child {
+            margin-top: 0;
+        }
+
+        .content-inner h4 {
+            font-family: var(--font-sans);
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text-dark);
+            letter-spacing: 0.01em;
+        }
+
+        .content-inner p {
+            font-family: var(--font-serif);
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-body);
+            margin-bottom: 1.25rem;
         }
 
         .principle-text {
-            padding: 1.25rem;
+            font-family: var(--font-serif);
+            font-size: 1.375rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: rgba(136, 178, 112, 0.12);
+            border-left: 4px solid var(--bg-green);
+            border-radius: 0;
+        }
+
+        .principle-text em {
+            color: var(--accent-coral);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        /* Key Points */
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .point {
+            padding: 1.75rem;
+            background: rgba(136, 178, 112, 0.08);
+            border-radius: 0;
+            border-left: 3px solid var(--accent-coral);
+        }
+
+        .point h4 {
+            color: var(--accent-coral);
+            margin-top: 0;
+        }
+
+        .point p {
+            font-size: 1.0625rem;
+        }
+
+        /* Services List */
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .service {
+            padding: 1.75rem;
+            background: rgba(136, 178, 112, 0.08);
+            border-radius: 0;
+            border-left: 3px solid var(--bg-green);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .service h4 {
+            margin-top: 0;
+            color: var(--accent-coral);
+        }
+
+        .service p {
+            font-size: 1.0625rem;
+        }
+
+        /* Transformations List */
+        .transformations-list {
+            margin: 2.5rem 0;
+        }
+
+        .transformation {
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+            background: rgba(136, 178, 112, 0.08);
+            border-radius: 0;
+            border-left: 4px solid var(--accent-coral);
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+        }
+
+        .transformation .number {
+            flex-shrink: 0;
+            width: 2.75rem;
+            height: 2.75rem;
+            background: var(--accent-coral);
+            color: var(--bg-cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-family: var(--font-sans);
             font-size: 1.125rem;
         }
-    }
-</style>
+
+        .transformation h4 {
+            margin-top: 0;
+        }
+
+        .transformation p {
+            font-size: 1.0625rem;
+        }
+
+        /* Phases */
+        .phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .phase {
+            padding: 1.75rem;
+            background: rgba(136, 178, 112, 0.08);
+            border-radius: 0;
+            border-left: 3px solid var(--bg-green);
+        }
+
+        .phase h4 {
+            margin-top: 0;
+            color: var(--accent-coral);
+        }
+
+        .phase p {
+            font-size: 1.0625rem;
+        }
+
+        /* Hypothesis */
+        .hypothesis {
+            font-family: var(--font-serif);
+            font-size: 1.375rem;
+            line-height: 1.8;
+            padding: 2rem;
+            background: rgba(136, 178, 112, 0.12);
+            border-left: 4px solid var(--bg-green);
+            border-radius: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .falsifiability {
+            padding: 1.5rem 2rem;
+            background: rgba(217, 119, 87, 0.12);
+            border-left: 4px solid var(--accent-coral);
+            border-radius: 0;
+            margin-bottom: 2.5rem;
+            font-size: 1.0625rem;
+        }
+
+        /* Method Steps */
+        .method-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .step {
+            padding: 1.75rem;
+            background: rgba(136, 178, 112, 0.08);
+            border-radius: 0;
+            border-left: 3px solid var(--bg-green);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            background: var(--accent-coral);
+            color: var(--bg-cream);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 2.75rem;
+            font-weight: 900;
+            font-family: var(--font-sans);
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .step h4 {
+            margin-top: 0;
+        }
+
+        .step p {
+            font-size: 1.0625rem;
+        }
+
+        /* Join Options */
+        .intro {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--text-body);
+            line-height: 1.8;
+        }
+
+        .join-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .option {
+            padding: 2rem;
+            background: rgba(136, 178, 112, 0.08);
+            border-radius: 0;
+            border-left: 3px solid var(--accent-coral);
+            text-align: center;
+        }
+
+        .option-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1.25rem;
+        }
+
+        .option h4 {
+            margin-top: 0;
+            color: var(--accent-coral);
+        }
+
+        .option p {
+            font-size: 1.0625rem;
+        }
+
+        /* Path Steps */
+        .path-steps {
+            list-style: none;
+            counter-reset: step-counter;
+            margin: 2.5rem 0;
+            padding: 0;
+        }
+
+        .path-steps li {
+            counter-increment: step-counter;
+            padding: 1.25rem 1.25rem 1.25rem 4rem;
+            margin-bottom: 0.75rem;
+            background: rgba(136, 178, 112, 0.08);
+            border-radius: 0;
+            position: relative;
+            color: var(--text-body);
+            font-size: 1.0625rem;
+            line-height: 1.7;
+        }
+
+        .path-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1.25rem;
+            width: 2.25rem;
+            height: 2.25rem;
+            background: var(--accent-coral);
+            color: var(--bg-cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+        }
+
+        /* Vision */
+        .vision {
+            margin-top: 3.5rem;
+            padding: 2.5rem;
+            background: rgba(136, 178, 112, 0.12);
+            border-radius: 0;
+            border-left: 4px solid var(--bg-green);
+        }
+
+        .vision h4 {
+            margin-top: 0;
+        }
+
+        .vision p {
+            font-size: 1.125rem;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-coral);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .section-title {
+                padding-right: 3rem;
+            }
+
+            .expand-icon {
+                right: 1.5rem;
+                font-size: 3rem;
+            }
+
+            .content-inner {
+                padding: 1.5rem 1.5rem 3rem;
+            }
+
+            .hero {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Smooth Scroll */
+        @media (prefers-reduced-motion: no-preference) {
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* D3 Visualization Containers */
+        .viz-container {
+            margin: 2.5rem 0;
+            padding: 2rem;
+            background: rgba(136, 178, 112, 0.05);
+            border-radius: 4px;
+            border: 1px solid rgba(136, 178, 112, 0.2);
+        }
+
+        .viz-container svg {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Math Legend */
+        .math-legend {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-top: 1px solid rgba(136, 178, 112, 0.2);
+            padding-top: 0.5rem;
+        }
+
+        /* Proposition Anchors */
+        .prop-anchor {
+            position: absolute;
+            left: -1.5rem;
+            top: 2rem;
+            /* Aligns with principle-text padding */
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--accent-coral);
+            opacity: 0;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            user-select: none;
+        }
+
+        .principle-text {
+            position: relative;
+            /* Context for absolute anchor */
+        }
+
+        .principle-text:hover .prop-anchor,
+        .hypothesis:hover .prop-anchor,
+        .falsifiability:hover .prop-anchor,
+        .vision:hover .prop-anchor {
+            opacity: 0.6;
+        }
+
+        .prop-anchor:hover {
+            opacity: 1 !important;
+            transform: scale(1.1);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--text-dark);
+            color: var(--bg-cream);
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateY(1rem);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Example Box and Visuals */
+        .example-box {
+            background-color: #fff9c4;
+            padding: 1.5rem;
+            border-left: 5px solid #fbc02d;
+            margin: 2rem 0;
+            border-radius: 4px;
+            color: #333;
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .visual-comparison {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .visual-item {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .visual-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .visual-caption {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .visual-arrow {
+            font-size: 3rem;
+            color: var(--accent-coral);
+            font-weight: 300;
+            transition: transform 0.3s ease;
+            line-height: 1;
+            padding: 0 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .visual-comparison {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .visual-arrow {
+                transform: rotate(90deg);
+                margin: 0.5rem 0;
+            }
+
+            .math-block {
+                font-size: 0.9rem;
+                padding: 0.75rem;
+                margin: 1rem -1rem;
+                /* Negative margin to gain width */
+                border-left: none;
+                border-right: none;
+                border-radius: 0;
+                width: calc(100% + 2rem);
+                max-width: calc(100% + 2rem);
+            }
+
+            .viz-container {
+                padding: 1rem 0.5rem;
+                margin: 1.5rem -1rem;
+                width: calc(100% + 2rem);
+                border-left: none;
+                border-right: none;
+                border-radius: 0;
+            }
+
+            .transformation {
+                padding: 1.25rem;
+                gap: 0.75rem;
+            }
+
+            .transformation .number {
+                width: 2.25rem;
+                height: 2.25rem;
+                font-size: 1rem;
+            }
+
+            .transformation p {
+                font-size: 1rem;
+                word-break: break-word;
+                /* Ensure text wraps */
+            }
+
+            .principle-text {
+                padding: 1.25rem;
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
 
 <body>
     <!-- Hero Section -->
@@ -987,6 +987,9 @@
     <section class="intro-section"
         style="background: linear-gradient(180deg, var(--bg-green) 0%, var(--bg-cream) 100%); padding: 5rem 2rem 4rem; border-bottom: 1px solid rgba(38, 51, 8, 0.15);">
         <div style="max-width: 900px; margin: 0 auto;">
+            <h2
+                style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                Introduction</h2>
             <p
                 style="font-family: var(--font-serif); font-size: clamp(1.25rem, 3vw, 1.5rem); line-height: 1.9; color: var(--text-dark); text-align: center; margin-bottom: 2.5rem; font-weight: 500;">
                 What if coordination didn't require <em
@@ -1039,14 +1042,17 @@
         <!-- Foundation Section -->
         <section class="accordion-section" id="foundation">
             <button class="section-header" aria-expanded="false" aria-controls="foundations">
-                <h3 class="section-title">Foundations</h3>
-                <p class="section-subtitle">Proportional Distribution Under Bounded Constraints</p>
+                <span class="section-title">Foundations</span>
+                <span class="section-subtitle">Proportional Distribution Under Bounded Constraints</span>
                 <span class="expand-icon" aria-hidden="true">+</span>
             </button>
             <div class="section-content" id="foundations">
                 <div class="content-inner">
+                    <h2
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        Foundations</h2>
 
-                    <h4>The Basic Elements</h4>
+                    <h3>The Basic Elements</h3>
                     <p class="intro">The protocol is built on five fundamental elements that describe the cycle of
                         production and recognition.</p>
 
@@ -1056,8 +1062,9 @@
                                 style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
                                 C</div>
                             <div>
-                                <h5 style="margin: 0 0 0.5rem 0;">Capacity (Finite Resources)</h5>
-                                <p style="margin: 0; font-size: 1rem;">The finite power to act or produce (e.g., time,
+                                <h4 style="margin: 0 0 0.5rem 0;">Capacity (Finite Resources)</h4>
+                                <p style="margin: 0; font-size: 1rem;">The finite power to act or produce (e.g.,
+                                    time,
                                     compute, labor, funds). <br>
                                     $C \in \mathbb{R}^+$ (Positive, finite, bounded value).</p>
                             </div>
@@ -1068,8 +1075,9 @@
                                 style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
                                 G</div>
                             <div>
-                                <h5 style="margin: 0 0 0.5rem 0;">Goals (Pursued Ends)</h5>
-                                <p style="margin: 0; font-size: 1rem;">The objectives or states that an entity seeks to
+                                <h4 style="margin: 0 0 0.5rem 0;">Goals (Pursued Ends)</h4>
+                                <p style="margin: 0; font-size: 1rem;">The objectives or states that an entity seeks
+                                    to
                                     realize using its capacity.</p>
                             </div>
                         </div>
@@ -1079,8 +1087,9 @@
                                 style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
                                 R</div>
                             <div>
-                                <h5 style="margin: 0 0 0.5rem 0;">Recognition (Subjective Assessment)</h5>
-                                <p style="margin: 0; font-size: 1rem;">The subjective acknowledgment of how much another
+                                <h4 style="margin: 0 0 0.5rem 0;">Recognition (Subjective Assessment)</h4>
+                                <p style="margin: 0; font-size: 1rem;">The subjective acknowledgment of how much
+                                    another
                                     entity contributes to one's goals.<br>
                                     $R \in \mathbb{R}^n$ (Multidimensional sensing of value).</p>
                             </div>
@@ -1091,8 +1100,9 @@
                                 style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
                                 A</div>
                             <div>
-                                <h5 style="margin: 0 0 0.5rem 0;">Allocation (Objective Distribution)</h5>
-                                <p style="margin: 0; font-size: 1rem;">The objective flow of capacity from provider to
+                                <h4 style="margin: 0 0 0.5rem 0;">Allocation (Objective Distribution)</h4>
+                                <p style="margin: 0; font-size: 1rem;">The objective flow of capacity from provider
+                                    to
                                     recipient.<br>
                                     $A = C \cdot \frac{R}{\sum R}$ (Proportional to recognition).</p>
                             </div>
@@ -1103,14 +1113,14 @@
                                 style="font-family: 'Space Grotesk'; font-weight: 700; font-size: 2rem; color: var(--accent-coral); line-height: 1;">
                                 O</div>
                             <div>
-                                <h5 style="margin: 0 0 0.5rem 0;">Outcomes (Realized Results)</h5>
+                                <h4 style="margin: 0 0 0.5rem 0;">Outcomes (Realized Results)</h4>
                                 <p style="margin: 0; font-size: 1rem;">The actual changes produced by the
                                     allocation. These outcomes educate future recognition.</p>
                             </div>
                         </div>
                     </div>
 
-                    <h4>The Fundamental Axiom</h4>
+                    <h3>The Fundamental Axiom</h3>
                     <p class="principle-text" id="prop-distribution">
                         <strong>Voluntary Association:</strong> Entities allocate their capacity ($A$) in proportion to
                         their recognition ($R$) of contribution toward their goals ($G$).
@@ -1124,14 +1134,14 @@
                         </div>
                     </div>
 
-                    <h4>Prioritization</h4>
+                    <h3>Prioritization</h3>
                     <p class="principle-text">
                         Goals form a tree where recognition flows down. Each node distributes 100% of its incoming
                         capacity to its children based on their contribution.
                     </p>
                     <div class="viz-container" id="goal-priority-tree"></div>
 
-                    <h4>Recursive Realization Logic</h4>
+                    <h3>Recursive Realization Logic</h3>
                     <p class="principle-text" style="margin-bottom: 2.5rem;">
                         The tree structure allows us to mathematically derive the realization of high-level goals from
                         granular contributions. It separates <strong>Goals</strong> (Branch Nodes) from
@@ -1140,7 +1150,7 @@
 
                     <div class="key-points" style="margin-bottom: 2.5rem;">
                         <div class="point">
-                            <h5>1. Global Weight (Relative Importance)</h5>
+                            <h4>1. Global Weight (Relative Importance)</h4>
                             <p>How important is this specific node in the context of the entire tree? It is the
                                 product of its local priority (share of parent) and its parent's global importance.</p>
                             <div class="math-block" style="margin: 1rem 0; font-size: 0.95rem;">
@@ -1149,7 +1159,7 @@
                         </div>
 
                         <div class="point">
-                            <h5>2. Fulfillment (Goal Realization)</h5>
+                            <h4>2. Fulfillment (Goal Realization)</h4>
                             <p>To what extent is this goal realized? For branches, it's the weighted average of their
                                 children. For leaves (contributions), it's the direct assessment of work done.</p>
                             <div class="math-block" style="margin: 1rem 0; font-size: 0.95rem;">
@@ -1162,7 +1172,7 @@
                     </div>
 
                     <div class="try-it-out-section" style="margin-top: 4rem; text-align: center;">
-                        <h4>Try it out!</h4>
+                        <h3>Try it out!</h3>
                         <p
                             style="font-size: 1.1rem; color: var(--text-body); max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.6;">
                             Drag a square up/down to increase/decrease its priority! To see more advanced features like
@@ -1209,17 +1219,23 @@
 
         <!-- Circuits Section -->
         <section class="accordion-section" id="circuit">
-            <button class="section-header" aria-expanded="false" aria-controls="circuits-content">
-                <h3 class="section-title">The Circuit</h3>
-                <p class="section-subtitle">Coordination as Scientific Capacity Allocation</p>
+            <button class="section-header" aria-expanded="false" aria-controls="circuit-content">
+                <span class="section-title">The Circuit</span>
+                <span class="section-subtitle">Coordination as Scientific Capacity Allocation</span>
                 <span class="expand-icon" aria-hidden="true">+</span>
             </button>
             <div class="section-content" id="circuit-content">
                 <div class="content-inner">
+                    <h2
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        The Circuit</h2>
+                    <h3
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        Circuit Steps</h3>
                     <div class="method-steps">
                         <div class="step">
                             <span class="step-number">1</span>
-                            <h5>Starting Point: Subjective Recognition</h5>
+                            <h4>Starting Point: Subjective Recognition</h4>
                             <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
                                 $$ R(t) = \text{My Current Recognition} $$
                             </div>
@@ -1228,7 +1244,7 @@
                         </div>
                         <div class="step">
                             <span class="step-number">2</span>
-                            <h5>Objectification: Capacity Allocation</h5>
+                            <h4>Objectification: Capacity Allocation</h4>
                             <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
                                 $$ A(t) = C \cdot \frac{R(t)}{\sum R(t)} $$
                             </div>
@@ -1236,7 +1252,7 @@
                         </div>
                         <div class="step">
                             <span class="step-number">3</span>
-                            <h5>Realization: Goal Achievement</h5>
+                            <h4>Realization: Goal Achievement</h4>
                             <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
                                 $$ O(t) = f(A(t), \text{Capacity}_{social}, \text{World}) $$
                             </div>
@@ -1244,7 +1260,7 @@
                         </div>
                         <div class="step">
                             <span class="step-number">4</span>
-                            <h5>Reflection: Outcome Assessment</h5>
+                            <h4>Reflection: Outcome Assessment</h4>
                             <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
                                 $$ \Delta G(t) = \text{Goals}_{realized} - \text{Goals}_{expected} $$
                             </div>
@@ -1252,7 +1268,7 @@
                         </div>
                         <div class="step">
                             <span class="step-number">5</span>
-                            <h5>Education: Subjectification</h5>
+                            <h4>Education: Subjectification</h4>
                             <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
                                 $$ R(t+1) = R(t) + \text{learning}(\Delta G, A, O) $$
                             </div>
@@ -1261,7 +1277,7 @@
                         </div>
                         <div class="step">
                             <span class="step-number">6</span>
-                            <h5>Development: Capacity Growth</h5>
+                            <h4>Development: Capacity Growth</h4>
                             <div class="math-block" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 1rem;">
                                 $$ C(t+1) = C(t) + \text{development}(\dots) $$
                             </div>
@@ -1270,9 +1286,9 @@
                         </div>
                     </div>
 
-                    <h5
+                    <h4
                         style="color: var(--accent-coral); margin-top: 3rem; text-transform: uppercase; font-family: var(--font-sans);">
-                        Convergence</h5>
+                        Convergence</h4>
                     <p class="principle-text" style="font-size: 1.1rem; padding: 1.5rem;">
                         As $t \to \infty$ (under the right conditions):<br>
                         • $R(t) \to R_T$ (subjective approaches objective truth)<br>
@@ -1282,7 +1298,7 @@
                     </p>
 
                     <div class="point" style="margin-bottom: 2.5rem; border-left: 3px solid var(--accent-coral);">
-                        <h5 style="margin-top: 0; color: var(--accent-coral);">The Right Conditions</h5>
+                        <h4 style="margin-top: 0; color: var(--accent-coral);">The Right Conditions</h4>
                         <ul style="list-style: none; padding-left: 0; line-height: 1.6;">
                             <li>• <strong>Voluntary Allocation</strong> (Sovereignty)</li>
                             <li>• <strong>Transparent Outcomes</strong> (Visibility)</li>
@@ -1294,16 +1310,19 @@
 
                     <div
                         style="background: rgba(136, 178, 112, 0.15); padding: 2rem; border-radius: 4px; border: 1px solid rgba(136, 178, 112, 0.3);">
-                        <h5
+                        <h4
                             style="margin-top: 0; color: var(--text-dark); text-transform: uppercase; font-family: var(--font-sans);">
-                            The Unity</h5>
-                        <p style="margin-bottom: 1.5rem;">At each moment, Subjective and Objective are distinct but
-                            unified. Each transforms into the other. The gap between them (misalignment) drives the
+                            The Unity</h4>
+                        <p style="margin-bottom: 1.5rem;">At each moment, Subjective and Objective are distinct
+                            but
+                            unified. Each transforms into the other. The gap between them (misalignment) drives
+                            the
                             process forward. The process itself educates, develops, and enriches.</p>
 
                         <div class="math-block" style="background: rgba(255,255,255,0.6); margin: 0;">
                             $$ \lim_{t \to \infty} [ \text{Subjective} \equiv \text{Objective} ] $$
-                            <div class="math-legend">Not identity, but unity (each is the realization of the other).
+                            <div class="math-legend">Not identity, but unity (each is the realization of the
+                                other).
                             </div>
                         </div>
                     </div>
@@ -1314,14 +1333,17 @@
         <!-- Alignment Section -->
         <section class="accordion-section" id="alignment">
             <button class="section-header" aria-expanded="false" aria-controls="alignment-content">
-                <h3 class="section-title">Anti-Gaming & Alignment</h3>
-                <p class="section-subtitle">Why Free-Riding and Gaming Self-Destruct</p>
+                <span class="section-title">Anti-Gaming & Alignment</span>
+                <span class="section-subtitle">Why Free-Riding and Gaming Self-Destruct</span>
                 <span class="expand-icon" aria-hidden="true">+</span>
             </button>
             <div class="section-content" id="alignment-content">
 
                 <div class="content-inner">
-                    <h4>True vs. False Recognition</h4>
+                    <h2
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        Anti-Gaming & Alignment</h2>
+                    <h3>True vs. False Recognition</h3>
                     <p class="principle-text" id="prop-true-recognition">
                         <strong>True Recognition:</strong> Recognition of contribution to the realization of priorities
                         that <em>enables the continued realization of priorities</em> (self-sustaining).
@@ -1331,7 +1353,7 @@
                         that <em>impairs the continued realization of priorities</em> (self-terminating).
                     </p>
 
-                    <h4>The Mathematical Necessity</h4>
+                    <h3>The Mathematical Necessity</h3>
                     <p>
                         Participants define their goals subjectively, but achieving them depends on objective access to
                         resources and contributions. Proportional recognition accuracy is validated through outcomes.
@@ -1371,7 +1393,7 @@
                     </p>
 
 
-                    <h4>Alignment</h4>
+                    <h3>Alignment</h3>
                     <p class="principle-text" id="prop-alignment">
                         <strong>Alignment (α)</strong> measures how closely your capacity allocation matches true
                         recognition.
@@ -1422,7 +1444,7 @@
 
                 <!-- Velocity Section -->
                 <div class="content-inner">
-                    <h4>Alignment Velocity: The Core Metric</h4>
+                    <h3>Alignment Velocity: The Core Metric</h3>
                     <p class="principle-text" id="prop-correction-velocity">
                         <strong>Alignment Velocity (v)</strong> measures how fast alignment improves or degrades.
                         Every moment of misallocation is lost goal achievement. Alignment velocity is the
@@ -1454,40 +1476,40 @@
                     <!-- Alignment Velocity Visualization -->
                     <div class="viz-container" id="correction-velocity-viz"></div>
 
-                    <h4>Infrastructure Conditions</h4>
+                    <h3>Infrastructure Conditions</h3>
                     <div class="key-points">
                         <div class="point">
-                            <h5>1. Transparency</h5>
+                            <h4>1. Transparency</h4>
                             <p>Real-time visibility into allocations and outcomes</p>
                             <div class="mini-latex" style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.8;">
                                 $$ \text{Visibility} \implies \uparrow \text{Detection Rate} $$
                             </div>
                         </div>
                         <div class="point">
-                            <h5>2. Sovereignty</h5>
+                            <h4>2. Sovereignty</h4>
                             <p>Unilateral power to reallocate capacity instantly</p>
                             <div class="mini-latex" style="margin-top: 0.5rem; font-size: 0.9em; opacity: 0.8;">
                                 $$ \text{Authority} \implies \text{Ability to set } \Delta \text{Capacity} $$
                             </div>
                         </div>
                         <div class="point">
-                            <h5>3. Revocability</h5>
+                            <h4>3. Revocability</h4>
                             <p>Instant withdrawal of allocation, no lock-in</p>
 
                         </div>
                         <div class="point">
-                            <h5>4. Discovery Infrastructure</h5>
+                            <h4>4. Discovery Infrastructure</h4>
                             <p>Low-friction mechanisms to find better partners</p>
 
                         </div>
                         <div class="point">
-                            <h5>5. Low Switching Costs</h5>
+                            <h4>5. Low Switching Costs</h4>
                             <p>Minimal transaction costs for reallocation</p>
 
                         </div>
                         <div class="point"
                             style="background: transparent; border: 1px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                            <h5 style="font-size: 2rem; margin: 0; opacity: 0.5;">?</h5>
+                            <h4 style="font-size: 2rem; margin: 0; opacity: 0.5;">?</h4>
                             <p style="text-align: center; opacity: 0.7;">List not exhaustive</p>
                         </div>
                     </div>
@@ -1495,7 +1517,7 @@
 
                 <div class="content-inner">
 
-                    <h4>How Do You Discover True Recognition?</h4>
+                    <h3>How Do You Discover True Recognition?</h3>
                     <p class="principle-text">
                         The protocol doesn't prescribe how to measure true recognition. Instead, it creates
                         evolutionary pressure: <strong>entities that develop better instruments for assessing
@@ -1518,7 +1540,7 @@
 
                     <div class="key-points" style="margin: 2rem 0;">
                         <div class="point">
-                            <h5>Embodied Knowing Comes First</h5>
+                            <h4>Embodied Knowing Comes First</h4>
                             <p>Humans bring sophisticated measurement capabilities evolved over millennia. These aren't
                                 noise to be filtered out - they're instruments that complement quantitative analysis:
                             </p>
@@ -1539,7 +1561,7 @@
                             </p>
                         </div>
                         <div class="point">
-                            <h5>Measurement Agnosticism</h5>
+                            <h4>Measurement Agnosticism</h4>
                             <p>The protocol doesn't care <em>how</em> you figure out what's actually helping you
                                 achieve your goals - it just ensures that figuring it out matters. Different entities
                                 will develop different assessment methods based on their context and capabilities.</p>
@@ -1555,7 +1577,7 @@
                             </ul>
                         </div>
                         <div class="point">
-                            <h5>Competitive Advantage</h5>
+                            <h4>Competitive Advantage</h4>
                             <p>Entities that invest in transparency infrastructure, rapid feedback mechanisms, and
                                 better ways to trace contribution through complex networks will achieve their goals
                                 more effectively. The framework doesn't solve the discovery problem - it makes solving
@@ -1563,7 +1585,7 @@
                         </div>
                     </div>
 
-                    <h4 style="margin-top: 3rem;">Why Free-Riding Fails: The Built-In Defense</h4>
+                    <h3 style="margin-top: 3rem;">Why Free-Riding Fails: The Built-In Defense</h3>
                     <p class="principle-text">
                         False recognition is self-punishing because of bounded capacity and proportional allocation.
                     </p>
@@ -1578,8 +1600,9 @@
 
                     <div
                         style="background: rgba(255, 107, 107, 0.1); padding: 2rem; border-radius: 8px; margin: 2rem 0; border-left: 4px solid var(--accent-coral);">
-                        <h5 style="margin-top: 0; color: var(--accent-coral);">Example: Why Free-Riding Self-Destructs
-                        </h5>
+                        <h4 style="margin-top: 0; color: var(--accent-coral);">Example: Why Free-Riding
+                            Self-Destructs
+                        </h4>
 
                         <p style="margin-bottom: 1.5rem;"><strong>Alice has 100 hours/month capacity. She currently
                                 recognizes:</strong></p>
@@ -1620,377 +1643,391 @@
                 </div>
 
             </div>
-    </div>
+        </section>
 
-    </section>
+        <!-- Abundance Section -->
+        <section class="accordion-section" id="abundance">
+            <button class="section-header" aria-expanded="false" aria-controls="abundance-content">
+                <span class="section-title">Abundance</span>
+                <span class="section-subtitle">The Infinite Potential of Proportion</span>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="abundance-content">
+                <div class="content-inner">
+                    <h2
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        Abundance</h2>
+                    <h3>Abundance Is in the Relations</h3>
+                    <p class="principle-text">
+                        Each relationship is a proportion, not an absolute quantity. Therefore, relationships have
+                        infinite potential.
+                    </p>
 
-    <!-- Abundance Section -->
-    <section class="accordion-section" id="abundance">
-        <button class="section-header" aria-expanded="false" aria-controls="abundance-content">
-            <h3 class="section-title">Abundance</h3>
-            <p class="section-subtitle">The Infinite Potential of Proportion</p>
-            <span class="expand-icon" aria-hidden="true">+</span>
-        </button>
-        <div class="section-content" id="abundance-content">
-            <div class="content-inner">
-                <h4>Abundance Is in the Relations</h4>
-                <p class="principle-text">
-                    Each relationship is a proportion, not an absolute quantity. Therefore, relationships have
-                    infinite potential.
-                </p>
+                    <div class="key-points" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                        <div class="point" style="border-left-color: var(--text-dark);">
+                            <h4>Absolute Quantities</h4>
+                            <p class="intro" style="font-family: monospace; font-size: 1.2rem; margin: 0.5rem 0;">"I
+                                have $100"</p>
+                            <p style="font-weight: 700;">Fixed. Bounded. Scarce.</p>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 0.5rem;">• More for you = less for me</li>
+                                <li style="margin-bottom: 0.5rem;">• Zero-sum competition</li>
+                                <li style="margin-bottom: 0.5rem;">• Resources are exhaustible</li>
+                            </ul>
+                            <p style="margin-top: 1rem; color: var(--accent-coral); font-weight: 700;">Scarcity is
+                                inherent</p>
+                            <div
+                                style="background: rgba(0,0,0,0.05); padding: 0.5rem; text-align: center; margin-top: 1rem; border-radius: 4px;">
+                                $100 <br> <span style="font-size: 0.8rem; opacity: 0.7;">Finite limit</span>
+                            </div>
+                        </div>
 
-                <div class="key-points" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-                    <div class="point" style="border-left-color: var(--text-dark);">
-                        <h5>Absolute Quantities</h5>
-                        <p class="intro" style="font-family: monospace; font-size: 1.2rem; margin: 0.5rem 0;">"I
-                            have $100"</p>
-                        <p style="font-weight: 700;">Fixed. Bounded. Scarce.</p>
-                        <ul style="list-style: none; padding: 0;">
-                            <li style="margin-bottom: 0.5rem;">• More for you = less for me</li>
-                            <li style="margin-bottom: 0.5rem;">• Zero-sum competition</li>
-                            <li style="margin-bottom: 0.5rem;">• Resources are exhaustible</li>
-                        </ul>
-                        <p style="margin-top: 1rem; color: var(--accent-coral); font-weight: 700;">Scarcity is
-                            inherent</p>
-                        <div
-                            style="background: rgba(0,0,0,0.05); padding: 0.5rem; text-align: center; margin-top: 1rem; border-radius: 4px;">
-                            $100 <br> <span style="font-size: 0.8rem; opacity: 0.7;">Finite limit</span>
+                        <div class="point" style="border-left-color: var(--bg-green);">
+                            <h4>Proportional Relations</h4>
+                            <p class="intro" style="font-family: monospace; font-size: 1.2rem; margin: 0.5rem 0;">"You
+                                receive 30%"</p>
+                            <p style="font-weight: 700;">Scale-invariant. Unlimited potential.</p>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 0.5rem;">• Works identically at any scale</li>
+                                <li style="margin-bottom: 0.5rem;">• Non-zero-sum relationships</li>
+                                <li style="margin-bottom: 0.5rem;">• Capacity can grow infinitely</li>
+                            </ul>
+                            <p
+                                style="margin-top: 1rem; color: var(--bg-green); font-weight: 700; filter: brightness(0.8);">
+                                Abundance is inherent</p>
+                            <div
+                                style="background: rgba(136, 178, 112, 0.2); padding: 0.5rem; text-align: center; margin-top: 1rem; border-radius: 4px;">
+                                30% <br> <span style="font-size: 0.8rem; opacity: 0.7;">Scales infinitely</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="point" style="border-left-color: var(--bg-green);">
-                        <h5>Proportional Relations</h5>
-                        <p class="intro" style="font-family: monospace; font-size: 1.2rem; margin: 0.5rem 0;">"You
-                            receive 30%"</p>
-                        <p style="font-weight: 700;">Scale-invariant. Unlimited potential.</p>
-                        <ul style="list-style: none; padding: 0;">
-                            <li style="margin-bottom: 0.5rem;">• Works identically at any scale</li>
-                            <li style="margin-bottom: 0.5rem;">• Non-zero-sum relationships</li>
-                            <li style="margin-bottom: 0.5rem;">• Capacity can grow infinitely</li>
-                        </ul>
-                        <p style="margin-top: 1rem; color: var(--bg-green); font-weight: 700; filter: brightness(0.8);">
-                            Abundance is inherent</p>
-                        <div
-                            style="background: rgba(136, 178, 112, 0.2); padding: 0.5rem; text-align: center; margin-top: 1rem; border-radius: 4px;">
-                            30% <br> <span style="font-size: 0.8rem; opacity: 0.7;">Scales infinitely</span>
-                        </div>
-                    </div>
-                </div>
-
-                <h4>Why Proportional Relations Have Infinite Potential</h4>
-                <p class="principle-text">
-                    The proportion remains constant while the absolute values scale infinitely.
-                    <br><br>
-                    30% of 10 = 3 <br>
-                    30% of 100 = 30 <br>
-                    30% of 1,000 = 300 <br>
-                    30% of 1,000,000 = 300,000
-                </p>
-                <div
-                    style="background: rgba(136, 178, 112, 0.25); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 5px solid #263308;">
-                    <p style="margin: 0; font-weight: 700; color: #263308; font-size: 1.05rem;">
-                        This is abundance: Not that resources are unlimited, but that relationships scale without
-                        limit.
+                    <h3>Why Proportional Relations Have Infinite Potential</h3>
+                    <p class="principle-text">
+                        The proportion remains constant while the absolute values scale infinitely.
+                        <br><br>
+                        30% of 10 = 3 <br>
+                        30% of 100 = 30 <br>
+                        30% of 1,000 = 300 <br>
+                        30% of 1,000,000 = 300,000
                     </p>
-                </div>
-
-                <div
-                    style="background: rgba(136, 178, 112, 0.1); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
-                    <p style="margin: 0;">
-                        A 30% recognition relationship works identically whether your capacity is 10 or 10 billion.
-                        <strong>The relationship structure itself is scale-invariant.</strong>
-                    </p>
-                </div>
-
-                <h4 style="color: var(--accent-coral);">Realizing our Infinite Potential</h4>
-                <div style="background: rgba(0,0,0,0.03); padding: 2rem; border-radius: 8px; margin-top: 1rem;">
-                    <p style="margin-top: 0; margin-bottom: 1.5rem; font-weight: 700;">
-                        While relationships have infinite potential, that potential becomes realized through the
-                        network:
-                    </p>
-                    <div style="margin-bottom: 1.5rem;">
-                        <strong>↑ More Capacity Distributed</strong><br>
-                        Each entity sharing capacity through recognition multiplies what's available
-                    </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <strong>↑ More Participants Coordinating</strong><br>
-                        Each new participant brings relationships, capacity, and coordination potential
-                    </div>
-                    <div>
-                        <strong>↑ More of the Infinite Is Actualized</strong><br>
-                        The mathematical potential becomes tangible coordination abundance
-                    </div>
-                </div>
-
-                <div
-                    style="display: flex; justify-content: space-between; text-align: center; margin-top: 2rem; gap: 1rem; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 150px; padding: 1rem; background: rgba(0,0,0,0.03);">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark); opacity: 0.6;">10
-                        </div>
-                        <div style="font-size: 0.8rem;">Limited actualized<br>coordination</div>
-                    </div>
-                    <div style="flex: 1; min-width: 150px; padding: 1rem; background: rgba(136, 178, 112, 0.1);">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-body);">1,000</div>
-                        <div style="font-size: 0.8rem;">Significant network<br>effects emerge</div>
-                    </div>
-                    <div style="flex: 1; min-width: 150px; padding: 1rem; background: rgba(136, 178, 112, 0.3);">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark);">1,000,000</div>
-                        <div style="font-size: 0.8rem;">Massive coordination<br>abundance</div>
-                    </div>
-                </div>
-
-                <p class="principle-text" style="font-weight: 700; margin-top: 2rem; text-align: center;">
-                    The more we coordinate through proportional recognition, the more of the infinite potential we
-                    realize.
-                    <br>
-                    <span style="font-weight: 400; font-size: 0.9em; display: block; margin-top: 0.5rem;">Each
-                        relationship contains infinite potential • Each participant can actualize more of it</span>
-                </p>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Allocation Section -->
-    <section class="accordion-section" id="allocation">
-        <button class="section-header" aria-expanded="false" aria-controls="allocation-content">
-            <h3 class="section-title">Allocation</h3>
-            <p class="section-subtitle">The Constrained Weighted Allocation Problem</p>
-            <span class="expand-icon" aria-hidden="true">+</span>
-        </button>
-        <div class="section-content" id="allocation-content">
-            <div class="content-inner">
-                <h4>The Allocation Problem</h4>
-                <p class="principle-text" id="prop-allocation-problem">
-                    Entities have <strong>needs</strong> (goals whose realization depends on capacity) and
-                    <strong>availabilities</strong> (capacities they can provide). The challenge is
-                    multi-provider, multi-recipient need satisfaction under constraints:
-                </p>
-                <div class="math-block">
-                    $$ \text{Find } \mathbf{X} \text{ s.t. } \forall i, \sum_j X_{ij} \le C_i \land \forall j,
-                    \sum_i
-                    X_{ij} \le N_j $$
-                    <div class="math-legend">
-                        Where: $\mathbf{X}$ = Allocation matrix ($X_{ij}$ is capacity from $i$ to $j$), $C_i$ =
-                        Capacity
-                        of provider $i$, $N_j$ = Need of recipient $j$.
-                    </div>
-                </div>
-
-                <div class="key-points">
-                    <div class="point">
-                        <h5>Provider Constraints</h5>
-                        <p>Each provider has finite capacities (each summing to 100%) to distribute among compatible
-                            recipients. They
-                            prefer to allocate to needs whose contributions they value most highly.</p>
-                    </div>
-                    <div class="point">
-                        <h5>Recipient Constraints</h5>
-                        <p>Each recipient has specific needs with finite capacity requirements. They prefer to
-                            receive from providers they trust/value most highly.</p>
-                    </div>
-                    <div class="point">
-                        <h5>Two-Sided Optimization</h5>
-                        <p>The system must simultaneously satisfy provider preferences (allocate to valued needs)
-                            and recipient preferences (receive from valued providers) while respecting capacity/need
-                            limits.</p>
-                    </div>
-                </div>
-
-                <p style="margin-top: 1.5rem; margin-bottom: 1.5rem;" id="prop-constrained-weighted">
-                    This is a <strong>constrained weighted allocation problem</strong>: finding the allocation
-                    matrix that minimizes deviation from both providers' priorities and recipients' source
-                    preferences, subject to capacity and need constraints.
-                </p>
-                <div class="math-block">
-                    $$ \min_{\mathbf{X}} \sum_{i,j} \left( \Phi(X_{ij}, P_{ij}) + \Psi(X_{ij}, R_{ji}) \right) $$
-                    <div class="math-legend">
-                        Where: $P_{ij}$ = Priority provider $i$ assigns to $j$, $R_{ji}$ = Preference recipient $j$
-                        has
-                        for $i$, $\Phi,\Psi$ = Cost functions.
-                    </div>
-                </div>
-
-                <p class="falsifiability" id="prop-key-mechanism">
-                    <strong>Key Mechanism:</strong> The protocol finds the allocation matrix that satisfies all
-                    capacity and need constraints while remaining as close as possible to the expressed preferences
-                    of both providers and recipients. This is the <em>least biased</em> solution - it doesn't impose
-                    any preference beyond what entities themselves express. The system converges to this solution
-                    through iterative constraint satisfaction, where capacity and need limits are enforced while
-                    preserving the proportional relationships in the expressed preferences.
-                </p>
-                <div class="math-block">
-                    $$ \frac{X_{ij}}{X_{ik}} \approx \frac{P_{ij}}{P_{ik}} $$
-                    <div class="math-legend">
-                        Where: The ratio of allocations approximates the ratio of expressed priorities (Proportional
-                        Preservation).
-                    </div>
-                </div>
-
-                <h4>Proportionality Properties</h4>
-                <p class="principle-text">
-                    The allocation mechanism has several important mathematical properties that emerge from
-                    constraint satisfaction:
-                </p>
-
-                <div class="key-points">
-                    <div class="point">
-                        <h5>Proportional Preservation</h5>
-                        <p>If you express that Need A is twice as aligned as Need B, the system allocates
-                            approximately twice as much capacity to A (when feasible given constraints). The
-                            proportional relationships you express are preserved in the final allocation.</p>
-                    </div>
-                    <div class="point">
-                        <h5>Least Biased Solution</h5>
-                        <p>Among all possible allocations that satisfy the constraints, the system selects the one
-                            that introduces the least additional bias beyond what entities express. This is the
-                            entropy-maximizing (information-theoretically optimal) solution.</p>
-                    </div>
-                    <div class="point">
-                        <h5>Constraint Propagation</h5>
-                        <p>When constraints bind (e.g., a recipient reaches capacity), the effects propagate through
-                            the network. Capacity that cannot flow to a full recipient automatically redistributes
-                            to other compatible needs according to expressed preferences.</p>
-                    </div>
-                    <div class="point">
-                        <h5>Equilibrium Convergence</h5>
-                        <p>The system converges to a stable equilibrium where no entity can improve their allocation
-                            quality (measured by preference satisfaction) without degrading someone else's. This is
-                            a Pareto-efficient outcome.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Transformation Section -->
-    <section class="accordion-section" id="transformation">
-        <button class="section-header" aria-expanded="false" aria-controls="transformation-content">
-            <h3 class="section-title">The Transformation</h3>
-            <p class="section-subtitle">From Coerced Procedures to Voluntary Coordination</p>
-            <span class="expand-icon" aria-hidden="true">+</span>
-        </button>
-        <div class="section-content" id="transformation-content">
-            <div class="content-inner">
-                <h4>Five Key Transformations</h4>
-                <div class="transformations-list">
-                    <div class="transformation">
-                        <span class="number">1</span>
-                        <h5>Voluntary Contribution Substitutes Coerced Labor</h5>
-                        <p>Organizational priorities realized through voluntary contribution as the primary
-                            mechanism.</p>
-                    </div>
-                    <div class="transformation">
-                        <span class="number">2</span>
-                        <h5>Coerced Contribution Mechanisms Dramatically Reduced</h5>
-                        <p>As freely-associating coverage expands, coerced contribution (taxation, mandatory labor)
-                            decreases proportionally while maintaining/improving service quality and
-                            goal-acheivement.
+                    <div
+                        style="background: rgba(136, 178, 112, 0.25); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 5px solid #263308;">
+                        <p style="margin: 0; font-weight: 700; color: #263308; font-size: 1.05rem;">
+                            This is abundance: Not that resources are unlimited, but that relationships scale without
+                            limit.
                         </p>
                     </div>
-                    <div class="transformation">
-                        <span class="number">3</span>
-                        <h5>Procedures Through Voluntary Capacity Direction</h5>
-                        <p>Application of organizational procedures (laws, rules, protocols) depends on voluntary
-                            capacity direction, making organizational priorities accountable to participant values.
+
+                    <div
+                        style="background: rgba(136, 178, 112, 0.1); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <p style="margin: 0;">
+                            A 30% recognition relationship works identically whether your capacity is 10 or 10 billion.
+                            <strong>The relationship structure itself is scale-invariant.</strong>
                         </p>
                     </div>
-                    <div class="transformation">
-                        <span class="number">4</span>
-                        <h5>Organizations Become Free</h5>
-                        <p>Organizations operate through voluntary association rather than coercion. Participants
-                            directly
-                            shape organizational function.</p>
+
+                    <h3 style="color: var(--accent-coral);">Realizing our Infinite Potential</h3>
+                    <div style="background: rgba(0,0,0,0.03); padding: 2rem; border-radius: 8px; margin-top: 1rem;">
+                        <p style="margin-top: 0; margin-bottom: 1.5rem; font-weight: 700;">
+                            While relationships have infinite potential, that potential becomes realized through the
+                            network:
+                        </p>
+                        <div style="margin-bottom: 1.5rem;">
+                            <strong>↑ More Capacity Distributed</strong><br>
+                            Each entity sharing capacity through recognition multiplies what's available
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <strong>↑ More Participants Coordinating</strong><br>
+                            Each new participant brings relationships, capacity, and coordination potential
+                        </div>
+                        <div>
+                            <strong>↑ More of the Infinite Is Actualized</strong><br>
+                            The mathematical potential becomes tangible coordination abundance
+                        </div>
                     </div>
-                    <div class="transformation">
-                        <span class="number">5</span>
-                        <h5>Coordination Becomes Scientific</h5>
-                        <p>Scientific capacity-allocation replaces ideological struggle, enabling continuous
-                            discovery
-                            of effective coordination patterns.</p>
+
+                    <div
+                        style="display: flex; justify-content: space-between; text-align: center; margin-top: 2rem; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 150px; padding: 1rem; background: rgba(0,0,0,0.03);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark); opacity: 0.6;">10
+                            </div>
+                            <div style="font-size: 0.8rem;">Limited actualized<br>coordination</div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px; padding: 1rem; background: rgba(136, 178, 112, 0.1);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-body);">1,000</div>
+                            <div style="font-size: 0.8rem;">Significant network<br>effects emerge</div>
+                        </div>
+                        <div style="flex: 1; min-width: 150px; padding: 1rem; background: rgba(136, 178, 112, 0.3);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark);">1,000,000</div>
+                            <div style="font-size: 0.8rem;">Massive coordination<br>abundance</div>
+                        </div>
                     </div>
+
+                    <p class="principle-text" style="font-weight: 700; margin-top: 2rem; text-align: center;">
+                        The more we coordinate through proportional recognition, the more of the infinite potential we
+                        realize.
+                        <br>
+                        <span style="font-weight: 400; font-size: 0.9em; display: block; margin-top: 0.5rem;">Each
+                            relationship contains infinite potential • Each participant can actualize more of it</span>
+                    </p>
+
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
+        <!-- Allocation Section -->
+        <section class="accordion-section" id="allocation">
+            <button class="section-header" aria-expanded="false" aria-controls="allocation-content">
+                <span class="section-title">Allocation</span>
+                <span class="section-subtitle">The Core Mechanism</span>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="allocation-content">
+                <div class="content-inner">
+                    <h2
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        Allocation</h2>
+                    <h3>The Allocation Problem</h3>
+                    <p class="principle-text" id="prop-allocation-problem">
+                        Entities have <strong>needs</strong> (goals whose realization depends on capacity) and
+                        <strong>availabilities</strong> (capacities they can provide). The challenge is
+                        multi-provider, multi-recipient need satisfaction under constraints:
+                    </p>
+                    <div class="math-block">
+                        $$ \text{Find } \mathbf{X} \text{ s.t. } \forall i, \sum_j X_{ij} \le C_i \land \forall j,
+                        \sum_i
+                        X_{ij} \le N_j $$
+                        <div class="math-legend">
+                            Where: $\mathbf{X}$ = Allocation matrix ($X_{ij}$ is capacity from $i$ to $j$), $C_i$ =
+                            Capacity
+                            of provider $i$, $N_j$ = Need of recipient $j$.
+                        </div>
+                    </div>
 
-    <!-- Join Section -->
-    <section class="accordion-section" id="join">
-        <button class="section-header" aria-expanded="false" aria-controls="join-content">
-            <h3 class="section-title">Join the Coalition</h3>
-            <p class="section-subtitle">Experiment. Contribute. Learn.</p>
-            <span class="expand-icon" aria-hidden="true">+</span>
-        </button>
-        <div class="section-content" id="join-content">
-            <div class="content-inner">
-                <p class="intro">
-                    This is not utopian fantasy but scientific hypothesis - testable, falsifiable, and subject to
-                    empirical
-                    validation.
-                </p>
+                    <div class="key-points">
+                        <div class="point">
+                            <h4>Provider Constraints</h4>
+                            <p>Each provider has finite capacities (each summing to 100%) to distribute among compatible
+                                recipients. They
+                                prefer to allocate to needs whose contributions they value most highly.</p>
+                        </div>
+                        <div class="point">
+                            <h4>Recipient Constraints</h4>
+                            <p>Each recipient has specific needs with finite capacity requirements. They prefer to
+                                receive from providers they trust/value most highly.</p>
+                        </div>
+                        <div class="point">
+                            <h4>Two-Sided Optimization</h4>
+                            <p>The system must simultaneously satisfy provider preferences (allocate to valued needs)
+                                and recipient preferences (receive from valued providers) while respecting capacity/need
+                                limits.</p>
+                        </div>
+                    </div>
 
-                <div class="join-options">
-                    <div class="option">
-                        <span class="option-icon">🔬</span>
-                        <h5>Experiment</h5>
-                        <p>Start a local coalition in your domain. Test the hypothesis. Measure outcomes.</p>
+                    <p style="margin-top: 1.5rem; margin-bottom: 1.5rem;" id="prop-constrained-weighted">
+                        This is a <strong>constrained weighted allocation problem</strong>: finding the allocation
+                        matrix that minimizes deviation from both providers' priorities and recipients' source
+                        preferences, subject to capacity and need constraints.
+                    </p>
+                    <div class="math-block">
+                        $$ \min_{\mathbf{X}} \sum_{i,j} \left( \Phi(X_{ij}, P_{ij}) + \Psi(X_{ij}, R_{ji}) \right) $$
+                        <div class="math-legend">
+                            Where: $P_{ij}$ = Priority provider $i$ assigns to $j$, $R_{ji}$ = Preference recipient $j$
+                            has
+                            for $i$, $\Phi,\Psi$ = Cost functions.
+                        </div>
                     </div>
-                    <div class="option">
-                        <span class="option-icon">🤝</span>
-                        <h5>Contribute</h5>
-                        <p>Allocate your capacity to your priorities.</p>
+
+                    <p class="falsifiability" id="prop-key-mechanism">
+                        <strong>Key Mechanism:</strong> The protocol finds the allocation matrix that satisfies all
+                        capacity and need constraints while remaining as close as possible to the expressed preferences
+                        of both providers and recipients. This is the <em>least biased</em> solution - it doesn't impose
+                        any preference beyond what entities themselves express. The system converges to this solution
+                        through iterative constraint satisfaction, where capacity and need limits are enforced while
+                        preserving the proportional relationships in the expressed preferences.
+                    </p>
+                    <div class="math-block">
+                        $$ \frac{X_{ij}}{X_{ik}} \approx \frac{P_{ij}}{P_{ik}} $$
+                        <div class="math-legend">
+                            Where: The ratio of allocations approximates the ratio of expressed priorities (Proportional
+                            Preservation).
+                        </div>
                     </div>
-                    <div class="option">
-                        <span class="option-icon">📖</span>
-                        <h5>Learn</h5>
-                        <p>Dive deeper into the framework. Understand the mathematical foundations.</p>
+
+                    <h3>Proportionality Properties</h3>
+                    <p class="principle-text">
+                        The allocation mechanism has several important mathematical properties that emerge from
+                        constraint satisfaction:
+                    </p>
+
+                    <div class="key-points">
+                        <div class="point">
+                            <h4>Proportional Preservation</h4>
+                            <p>If you express that Need A is twice as aligned as Need B, the system allocates
+                                approximately twice as much capacity to A (when feasible given constraints). The
+                                proportional relationships you express are preserved in the final allocation.</p>
+                        </div>
+                        <div class="point">
+                            <h4>Least Biased Solution</h4>
+                            <p>Among all possible allocations that satisfy the constraints, the system selects the one
+                                that introduces the least additional bias beyond what entities express. This is the
+                                entropy-maximizing (information-theoretically optimal) solution.</p>
+                        </div>
+                        <div class="point">
+                            <h4>Constraint Propagation</h4>
+                            <p>When constraints bind (e.g., a recipient reaches capacity), the effects propagate through
+                                the network. Capacity that cannot flow to a full recipient automatically redistributes
+                                to other compatible needs according to expressed preferences.</p>
+                        </div>
+                        <div class="point">
+                            <h4>Equilibrium Convergence</h4>
+                            <p>The system converges to a stable equilibrium where no entity can improve their allocation
+                                quality (measured by preference satisfaction) without degrading someone else's. This is
+                                a Pareto-efficient outcome.</p>
+                        </div>
                     </div>
-                    <div class="option">
-                        <span class="option-icon">💻</span>
-                        <h5>Develop</h5>
-                        <p>Build on the protocol.</p>
-                        <div
-                            style="background: rgba(38, 51, 8, 0.8); color: #fff; padding: 0.75rem; border-radius: 4px; font-family: monospace; font-size: 0.9rem; margin-top: 0.5rem; text-align: left;">
-                            npm i <a href="https://www.npmjs.com/package/@playnet/free-association" target="_blank"
-                                style="color: #fff; text-decoration: underline;">@playnet/free-association</a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Transformation Section -->
+        <section class="accordion-section" id="transformation">
+            <button class="section-header" aria-expanded="false" aria-controls="transformation-content">
+                <span class="section-title">The Transformation</span>
+                <span class="section-subtitle">From Coercion to Voluntary Coordination</span>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="transformation-content">
+                <div class="content-inner">
+                    <h2
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        The Transformation</h2>
+                    <h3>Five Key Transformations</h3>
+                    <div class="transformations-list">
+                        <div class="transformation">
+                            <span class="number">1</span>
+                            <h4>Voluntary Contribution Substitutes Coerced Labor</h4>
+                            <p>Organizational priorities realized through voluntary contribution as the primary
+                                mechanism.</p>
+                        </div>
+                        <div class="transformation">
+                            <span class="number">2</span>
+                            <h4>Coerced Contribution Mechanisms Dramatically Reduced</h4>
+                            <p>As freely-associating coverage expands, coerced contribution (taxation, mandatory labor)
+                                decreases proportionally while maintaining/improving service quality and
+                                goal-acheivement.
+                            </p>
+                        </div>
+                        <div class="transformation">
+                            <span class="number">3</span>
+                            <h4>Procedures Through Voluntary Capacity Direction</h4>
+                            <p>Application of organizational procedures (laws, rules, protocols) depends on voluntary
+                                capacity direction, making organizational priorities accountable to participant values.
+                            </p>
+                        </div>
+                        <div class="transformation">
+                            <span class="number">4</span>
+                            <h4>Organizations Become Free</h4>
+                            <p>Organizations operate through voluntary association rather than coercion. Participants
+                                directly
+                                shape organizational function.</p>
+                        </div>
+                        <div class="transformation">
+                            <span class="number">5</span>
+                            <h4>Coordination Becomes Scientific</h4>
+                            <p>Scientific capacity-allocation replaces ideological struggle, enabling continuous
+                                discovery
+                                of effective coordination patterns.</p>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <h4>The Path Forward</h4>
-                <ol class="path-steps">
-                    <li>Start with small local coalitions in specific domains</li>
-                    <li>Demonstrate effectiveness through measurable outcomes</li>
-                    <li>Attract participants through voluntary appeal</li>
-                    <li>Scale successful patterns to larger domains</li>
-                    <li>Gradually substitute for coerced capacity provisioning where effective</li>
-                    <li>Reduce coerced contribution (taxation, mandatory labor) proportionally to successful
-                        substitution</li>
-                    <li>Transform organizations into coordination platform for voluntary association</li>
-                </ol>
 
-                <div class="vision">
-                    <h4>The Vision</h4>
-                    <p>
-                        A civilization where the fulfillment of needs and the pursuit of goals are no longer
-                        directed
-                        by force,
-                        but coordinated through the free alignment of capacity. By making the social direction of
-                        production legible,
-                        voluntary, and scientifically adjustable, we do not just 'fix' organizations - we unleash
-                        the
-                        collective
-                        intelligence of the species. This is the transition from the administration of scarcity to
-                        the
-                        organization
-                        of abundance; from the history of coercion to the future of free association.
+        <!-- Join Section -->
+        <section class="accordion-section" id="join">
+            <button class="section-header" aria-expanded="false" aria-controls="join-content">
+                <span class="section-title">Join the Coalition</span>
+                <span class="section-subtitle">Experimental Pilots</span>
+                <span class="expand-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="section-content" id="join-content">
+                <div class="content-inner">
+                    <h2
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        Join the Coalition</h2>
+                    <p class="intro">
+                        This is not utopian fantasy but scientific hypothesis - testable, falsifiable, and subject to
+                        empirical
+                        validation.
                     </p>
+
+                    <h3
+                        style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">
+                        Ways to Join</h3>
+                    <div class="join-options">
+                        <div class="option">
+                            <span class="option-icon">🔬</span>
+                            <h4>Experiment</h4>
+                            <p>Start a local coalition in your domain. Test the hypothesis. Measure outcomes.</p>
+                        </div>
+                        <div class="option">
+                            <span class="option-icon">🤝</span>
+                            <h4>Contribute</h4>
+                            <p>Allocate your capacity to your priorities.</p>
+                        </div>
+                        <div class="option">
+                            <span class="option-icon">📖</span>
+                            <h4>Learn</h4>
+                            <p>Dive deeper into the framework. Understand the mathematical foundations.</p>
+                        </div>
+                        <div class="option">
+                            <span class="option-icon">💻</span>
+                            <h4>Develop</h4>
+                            <p>Build on the protocol.</p>
+                            <div
+                                style="background: rgba(38, 51, 8, 0.8); color: #fff; padding: 0.75rem; border-radius: 4px; font-family: monospace; font-size: 0.9rem; margin-top: 0.5rem; text-align: left;">
+                                npm i <a href="https://www.npmjs.com/package/@playnet/free-association" target="_blank"
+                                    style="color: #fff; text-decoration: underline;">@playnet/free-association</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>The Path Forward</h3>
+                    <ol class="path-steps">
+                        <li>Start with small local coalitions in specific domains</li>
+                        <li>Demonstrate effectiveness through measurable outcomes</li>
+                        <li>Attract participants through voluntary appeal</li>
+                        <li>Scale successful patterns to larger domains</li>
+                        <li>Gradually substitute for coerced capacity provisioning where effective</li>
+                        <li>Reduce coerced contribution (taxation, mandatory labor) proportionally to successful
+                            substitution</li>
+                        <li>Transform organizations into coordination platform for voluntary association</li>
+                    </ol>
+
+                    <div class="vision">
+                        <h3>The Vision</h3>
+                        <p>
+                            A civilization where the fulfillment of needs and the pursuit of goals are no longer
+                            directed
+                            by force,
+                            but coordinated through the free alignment of capacity. By making the social direction of
+                            production legible,
+                            voluntary, and scientifically adjustable, we do not just 'fix' organizations - we unleash
+                            the
+                            collective
+                            intelligence of the species. This is the transition from the administration of scarcity to
+                            the
+                            organization
+                            of abundance; from the history of coercion to the future of free association.
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     </div>
 
@@ -2820,7 +2857,7 @@
                     result += `### ${elem.textContent.trim()}\n\n`;
                     break;
 
-                case 'h5':
+                case 'h4':
                     result += `#### ${elem.textContent.trim()}\n\n`;
                     break;
 
@@ -2868,14 +2905,14 @@
                     }
                     // Handle individual points
                     else if (elem.classList.contains('point')) {
-                        const heading = elem.querySelector('h5');
+                        const heading = elem.querySelector('h4');
                         if (heading) {
                             result += `#### ${heading.textContent.trim()}\n\n`;
                         }
 
                         // Process children in order
                         Array.from(elem.children).forEach(child => {
-                            if (child.tagName.toLowerCase() === 'h5') {
+                            if (child.tagName.toLowerCase() === 'h4') {
                                 // Already handled
                             } else if (child.tagName.toLowerCase() === 'p') {
                                 result += `${processInlineContent(child)}\n\n`;
@@ -2896,7 +2933,7 @@
                     // Handle individual steps
                     else if (elem.classList.contains('step')) {
                         const stepNum = elem.querySelector('.step-number')?.textContent.trim();
-                        const heading = elem.querySelector('h5');
+                        const heading = elem.querySelector('h4');
                         if (heading) {
                             result += `#### ${stepNum ? stepNum + '. ' : ''}${heading.textContent.trim()}\n\n`;
                         }
@@ -2916,7 +2953,7 @@
                     }
                     // Handle example boxes (like free-riding example)
                     else if (elem.style.background && elem.style.background.includes('rgba(255, 107, 107')) {
-                        const heading = elem.querySelector('h5');
+                        const heading = elem.querySelector('h4');
                         if (heading) {
                             result += `> **${heading.textContent.trim()}**\n>\n`;
                         }
